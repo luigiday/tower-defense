@@ -17,7 +17,7 @@ Pour tout installer d'un coup, executer dans un terminal (bash/CMD) (pour linux,
 
 features = {"one": 1, "two": 2}
 
-class SnakeLauncher(QWidget):
+class SnakeLauncher(QWidget): #la classe a été en majoritée generée a l'aide d'outils d'intelligence atificielle, nous comprenons néemoins le code
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Tower defense Launcher")
@@ -61,18 +61,27 @@ class SnakeLauncher(QWidget):
 
     def update_lives(self, state):
         """Met à jour la variable lives_enabled selon l'état de la checkbox"""
-        features[2] = state == 2  # 2 signifie "coché" en Qt6
-        print(f"DEBUG : Deplacement de fruits: {features[0]}")
+        try:
+            features[2] = state == 2  # 2 signifie "coché" en Qt6
+            print(f"DEBUG : Deplacement de fruits: {features[0]}")
+        except Exception as e:
+            self.show_error_popup(e)
         
     def update_timer(self, state):
         """Met à jour la variable timer_enabled selon l'état de la checkbox"""
-        features[1] = state == 2  # 2 signifie "coché" en Qt6
-        print(f"DEBUG : Temps limite activé: {features[1]}")
+        try:
+            features[1] = state == 2  # 2 signifie "coché" en Qt6
+            print(f"DEBUG : Temps limite activé: {features[1]}")
+        except Exception as e:
+            self.show_error_popup(e)
     
     def update_degrade(self, state):
         """Met à jour la variable degrade selon l'état de la checkbox"""
-        features[3] = state == 2  # 2 signifie "coché" en Qt6
-        print(f"DEBUG : Degradé activé : {features[1]}")
+        try:
+            features[3] = state == 2  # 2 signifie "coché" en Qt6
+            print(f"DEBUG : Degradé activé : {features[1]}")
+        except Exception as e:
+            self.show_error_popup(e)
 
     def show_error_popup(self, e):
         msg = QMessageBox(self)
