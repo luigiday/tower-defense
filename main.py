@@ -17,7 +17,7 @@ Pour tout installer d'un coup, executer dans un terminal (bash/CMD) (pour linux,
 
 features = {"one": 1, "two": 2}
 
-class SnakeLauncher(QWidget): #la classe a été en majoritée generée a l'aide d'outils d'intelligence atificielle, nous comprenons néemoins le code
+class SnakeLauncher(QWidget): #la classe a été en pertie (50% a peu pres, ) generée a l'aide d'outils d'intelligence atificielle, nous comprenons néemoins le code
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Tower defense Launcher")
