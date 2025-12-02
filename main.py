@@ -76,8 +76,8 @@ class SnakeLauncher(QWidget):
     def show_error_popup(self, e):
         msg = QMessageBox(self)
         msg.setIcon(QMessageBox.Icon.Critical)
-        msg.setWindowTitle("Erreur - Snake")
-        msg.setText("Une erreur est survenue durant l'exécution du jeu Snake !")
+        msg.setWindowTitle("Erreur - Tower Defense")
+        msg.setText("Une erreur est survenue durant l'exécution du jeu Tower Def !")
         if debug_allow:
             msg.setInformativeText(f"> {str(e)}\n\nSi cette erreur arrive plusieurs fois, nous te conseillons de rapporter l'erreur aux développeurs du jeu.\n\nTu peux essayer de continuer si tu pense que l'erreur n'est pas critique, mais la stabilitée du jeu pourra être affectée.")
         else:
@@ -101,7 +101,7 @@ class SnakeLauncher(QWidget):
         elif msg.clickedButton() == rapporter_btn:
             # Exemple : ouvrir un lien vers un formulaire de bug ou copier le message
             pygame.quit()
-            QMessageBox.information(self, "Snake", "Fonction non implementée actuellement.")
+            QMessageBox.information(self, "Tower Defense", "Fonction non implementée actuellement.")
             # Ou tu peux faire autre chose ici
 
 
