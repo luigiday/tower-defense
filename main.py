@@ -1,6 +1,7 @@
 #le code de l'ui pr le launcher et tt ce qui est textuel...
 try:
     import pygame
+    import game
     #from tkinter import messagebox
     #import tkinter as tk
     from PyQt6.QtWidgets import QApplication, QWidget, QCheckBox, QVBoxLayout, QGroupBox, QPushButton, QMessageBox
@@ -110,7 +111,7 @@ class SnakeLauncher(QWidget):
         #root = tk.Tk()
         #root.withdraw()
         try:
-            maingame()
+            game.main()
         except Exception as e:
             if not str(e) == "video system not initialized":
                 self.show_error_popup(e)
