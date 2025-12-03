@@ -55,4 +55,5 @@ def main():
                 running = False
 
     pygame.quit()
-main()
+#main() 
+# Ne mettez cette ligne que pr vos tests, pensez a comment out avant de commit
