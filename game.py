@@ -1,8 +1,11 @@
 from random import randint
 import pygame
 from time import sleep
+import ui_tooling #utilitaire custom pour afficher des fenêtres PyQt6 (par exemple pour sélectionner une tour ou mettre en pause le jeu), correspond au fichier ui_tooling.py
 path=[]
 monstres=[]
+argent = 0 #a modifier
+
 def main():
     pygame.init()
     clock = pygame.time.Clock()
