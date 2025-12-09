@@ -54,6 +54,12 @@ def main():
     running = True
     while running:
         for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONUP:  # or MOUSEBUTTONDOWN depending on what you want.
+                position = event.pos
+                try:
+                    ui_tooling.select_tower(argent)
+                except Exception as e:
+                    ui_tooling.show_error_popup(e)
             if event.type == pygame.QUIT:
                 running = False
 
