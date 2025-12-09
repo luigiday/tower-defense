@@ -6,6 +6,8 @@ try:
     #import tkinter as tk
     from PyQt6.QtWidgets import QApplication, QWidget, QCheckBox, QVBoxLayout, QGroupBox, QPushButton, QMessageBox
     import sys
+    from PyQt6 import QtWidgets, uic
+
 
 except ImportError:
     print('''ImportError : TowerDefense ne peux pas s'initialiser !\nAssurez vous d'avoir les modules necessaire a son fonctionement installés : 
@@ -17,42 +19,15 @@ Pour tout installer d'un coup, executer dans un terminal (bash/CMD) (pour linux,
 
 features = {"one": 1, "two": 2}
 
-class SnakeLauncher(QWidget): #la classe a été en pertie (50% a peu pres, ) generée a l'aide d'outils d'intelligence atificielle, nous comprenons néemoins le code
+class SnakeLauncher(QtWidgets.QMainWindow): #la classe a été en pertie (50% a peu pres, ) generée a l'aide d'outils d'intelligence atificielle, nous comprenons néemoins le code
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Tower defense Launcher")
-        self.setFixedSize(300, 210)  # Taille de la fenêtre ajustée
-        
-        # Crée un QGroupBox pour contenir les checkboxes
-        self.checkbox_group = QGroupBox("Paramètres du jeu", self)
-        
-        # Crée un layout vertical pour les checkboxes
-        self.checkbox_layout = QVBoxLayout()
-        
-        # Crée les checkboxes
-        self.move_checkbox = QCheckBox("Deplacement de fruits", self, checked=False)
-        self.timer_checkbox = QCheckBox("Temps limite", self, checked=False)
-        self.degrdae_checkbox = QCheckBox("Serpent en dégradé", self, checked=True)
 
-        self.move_checkbox.stateChanged.connect(self.update_lives)
-        self.timer_checkbox.stateChanged.connect(self.update_timer)
-        self.degrdae_checkbox.stateChanged.connect(self.update_degrade)
-
-        # Ajoute les checkboxes au layout
-        self.checkbox_layout.addWidget(self.move_checkbox)
-        self.checkbox_layout.addWidget(self.timer_checkbox)
-        self.checkbox_layout.addWidget(self.degrdae_checkbox)
-        
-        # Associe le layout au QGroupBox
-        self.checkbox_group.setLayout(self.checkbox_layout)
-        
-        # Positionner le QGroupBox dans la fenêtre
-        self.checkbox_group.setGeometry(20, 20, 255, 110)
+        uic.loadUi("ui_launcher.ui", self)
         
         # Créer un bouton de lancement
-        self.start_button = QPushButton("Lancer le jeu !", self)
         self.start_button.clicked.connect(self.maingame_load)
-        self.start_button.setGeometry(80, 150, 140, 40)
+        self.exitbtn.clicked.connect(sys.exit)
 
         #self.lives_checkbox.setEnabled(False)
         #self.timer_checkbox.setEnabled(False)
