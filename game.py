@@ -57,6 +57,8 @@ def main():
     
     pygame.display.update()
 
+    
+
     running = True
     while running:
         for event in pygame.event.get():
@@ -70,6 +72,6 @@ def main():
             clock.tick(8)
 
     pygame.quit()
-main()
+#main()
     
 # Ne mettez cette ligne que pr vos tests, pensez a comment out avant de commit
