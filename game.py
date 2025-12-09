@@ -11,8 +11,9 @@ def main():
     clock = pygame.time.Clock()
     frozen = False
     running = True
-    
     clock.tick(8)
+    
+
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 
     def color(x, y, color):
@@ -41,15 +42,22 @@ def main():
           color(*b, (128, 128, 128))
           color(*c, (128, 128, 128))
     def monstre():
-        for i in range(0,len(path),3):
-            color(*path[i], (200,0,0))
+        for i in range(1,len(path),3):
+           for y in range(120):
+            a=(i,32)
+            monstres.append(a)
+            color(*monstres[y], (200,0,0))
+
 
 
 
 #bon déja g fais un chemin de base parce que blc çççççççççççççç
     initi()
+    monstre()
     
     pygame.display.update()
+
+    
 
     running = True
     while running:
@@ -62,7 +70,14 @@ def main():
                     ui_tooling.show_error_popup(e)
             if event.type == pygame.QUIT:
                 running = False
+           
+                
+            pygame.display.flip()
+
+
+            clock.tick(8)
 
     pygame.quit()
-#main() 
+#main()
+    
 # Ne mettez cette ligne que pr vos tests, pensez a comment out avant de commit
