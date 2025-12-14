@@ -26,8 +26,8 @@ def select_tower(solde):
     #for btn in dialog.findChildren(QtWidgets.QAbstractButton):
     #    print(f"{btn.objectName()}.clicked.connect(update_text({btn.objectName()}))")
 
-    for btn in dialog.findChildren(QtWidgets.QAbstractButton):
-        btn.clicked.connect(print(btn.objectName()))
+    #for btn in dialog.findChildren(QtWidgets.QAbstractButton):
+    #    btn.clicked.connect(print(btn.objectName()))
 
     #start_button.clicked.connect(self.maingame_load)
 
@@ -77,14 +77,16 @@ def ask_for_exit():
     msg = QMessageBox()
     msg.setIcon(QMessageBox.Icon.Question)
     msg.setWindowTitle("Quitter - Tower Defense")
-    msg.setText("Voulez-vus vraiment abandonner votre partie ?")
+    msg.setText("Voulez-vous vraiment abandonner votre partie ?")
     msg.setInformativeText("Votre score et vos dépenses ne seront pas sauvegardés")
 
-    continuer_btn = msg.addButton("Abandonner", QMessageBox.ButtonRole.AcceptRole)
-    quitter_btn = msg.addButton("Reprendre", QMessageBox.ButtonRole.RejectRole)
+    giveup_btn = msg.addButton("Abandonner", QMessageBox.ButtonRole.AcceptRole)
+    continue_btn = msg.addButton("Reprendre", QMessageBox.ButtonRole.RejectRole)
 
     msg.exec()
 
-    if msg.clickedButton() == quitter_btn:
+    if msg.clickedButton() == giveup_btn:
         pygame.quit()
         raise SystemExit
+        return True
+    return False

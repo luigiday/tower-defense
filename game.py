@@ -80,7 +80,8 @@ def main():
                     pygame.event.clear()
 
             if event.type == pygame.QUIT:
-                running = False
+                if ui_tooling.ask_for_exit():
+                    running = False
            
                 
         pygame.display.flip()
