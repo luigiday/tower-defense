@@ -1,27 +1,18 @@
 import sys
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import QApplication, QWidget, QCheckBox, QVBoxLayout, QGroupBox, QPushButton, QMessageBox
+
 def select_tower(solde):
-    # DO NOT create a new QApplication here!
-    # Your main launcher already created it.
 
     dialog = QtWidgets.QDialog()
     uic.loadUi("select_tour.ui", dialog)
 
     # OPTIONAL: If you want the solde to appear in the UI
-    if hasattr(dialog, "solde_label"):
-        dialog.solde_label.setText(str(solde))
-
-    # Run UI as a modal dialog
-    result = dialog.exec_()
+    #if hasattr(dialog, "solde_label"):
+    #    dialog.solde_label.setText(str(solde))
 
     # RETURN something depending on UI (placeholder)
     # You must replace this with your actual selection logic.
-    if result == QtWidgets.QDialog.Accepted:
-        # Example: return the value of a QListWidget
-        if hasattr(dialog, "tower_list"):
-            return dialog.tower_list.currentItem().text()
-        return True  # fallback
     return None
 
 
