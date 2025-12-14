@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>647</width>
+    <width>648</width>
     <height>263</height>
    </rect>
   </property>
@@ -29,84 +29,6 @@
     <string>Annuler</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="tourlectrique">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>60</y>
-     <width>151</width>
-     <height>151</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>Assets/tourlectrique.png</normaloff>Assets/tourlectrique.png</iconset>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>130</width>
-     <height>130</height>
-    </size>
-   </property>
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="cristalexplosif">
-   <property name="geometry">
-    <rect>
-     <x>170</x>
-     <y>60</y>
-     <width>151</width>
-     <height>151</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>Assets/cristalexplosif.png</normaloff>Assets/cristalexplosif.png</iconset>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>130</width>
-     <height>130</height>
-    </size>
-   </property>
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="sapintueur">
-   <property name="geometry">
-    <rect>
-     <x>330</x>
-     <y>60</y>
-     <width>151</width>
-     <height>151</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>Assets/sapintueur.png</normaloff>Assets/sapintueur.png</iconset>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>130</width>
-     <height>130</height>
-    </size>
-   </property>
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-  </widget>
   <widget class="QPushButton" name="placer_btn">
    <property name="geometry">
     <rect>
@@ -118,35 +40,6 @@
    </property>
    <property name="text">
     <string>Placer (X crédits)</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="lasttowser">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>490</x>
-     <y>60</y>
-     <width>151</width>
-     <height>151</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string/>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>Assets/tourlectrique.png</normaloff>Assets/tourlectrique.png</iconset>
-   </property>
-   <property name="iconSize">
-    <size>
-     <width>130</width>
-     <height>130</height>
-    </size>
-   </property>
-   <property name="checkable">
-    <bool>true</bool>
    </property>
   </widget>
   <widget class="QLabel" name="titlelabel">
@@ -190,6 +83,118 @@
     <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
    </property>
   </widget>
+  <widget class="QWidget" name="buttons" native="true">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>60</y>
+     <width>631</width>
+     <height>151</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QPushButton" name="tourlectrique">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>Assets/tourlectrique.png</normaloff>Assets/tourlectrique.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>130</width>
+        <height>130</height>
+       </size>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="sapintueur">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>Assets/sapintueur.png</normaloff>Assets/sapintueur.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>130</width>
+        <height>130</height>
+       </size>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="cristalexplosif">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>Assets/cristalexplosif.png</normaloff>Assets/cristalexplosif.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>130</width>
+        <height>130</height>
+       </size>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="lasttowser">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>Assets/tourlectrique.png</normaloff>Assets/tourlectrique.png</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>130</width>
+        <height>130</height>
+       </size>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <zorder>buttons</zorder>
+  <zorder>cancel_btn</zorder>
+  <zorder>placer_btn</zorder>
+  <zorder>titlelabel</zorder>
+  <zorder>label</zorder>
  </widget>
  <resources/>
  <connections/>

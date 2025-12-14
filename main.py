@@ -94,6 +94,7 @@ class SnakeLauncher(QtWidgets.QMainWindow): #la classe a été en pertie (50% a 
         self.hide()
         #root = tk.Tk()
         #root.withdraw()
+        #game.main()
         try:
             game.main()
         except Exception as e:

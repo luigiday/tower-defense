@@ -6,15 +6,19 @@ path=[]
 monstres=[]
 argent = 0 #a modifier
 
+
+
 def main():
     pygame.init()
     clock = pygame.time.Clock()
     frozen = False
     running = True
     clock.tick(8)
+    ui_select_lock = False
     
+    screen = pygame.display.set_mode((1920, 1080), pygame.SCALED) #On peux pas mettre full plein ecran parce que sinon ca bug qd on place 1 tour
 
-    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+
 
     def color(x, y, color):
         if x < 0 or x >= 120:
@@ -54,6 +58,7 @@ def main():
 #bon déja g fais un chemin de base parce que blc çççççççççççççç
     initi()
     monstre()
+    monstre()
     
     pygame.display.update()
 
@@ -62,20 +67,26 @@ def main():
     running = True
     while running:
         for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONUP:  # or MOUSEBUTTONDOWN depending on what you want.
-                position = event.pos
+            if event.type == pygame.MOUSEBUTTONUP and not ui_select_lock:
+                ui_select_lock = True
+                pygame.event.set_blocked(None)  # pause events
                 try:
                     ui_tooling.select_tower(argent)
                 except Exception as e:
                     ui_tooling.show_error_popup(e)
+                finally:
+                    pygame.event.set_allowed(None)
+                    ui_select_lock = False
+                    pygame.event.clear()
+
             if event.type == pygame.QUIT:
                 running = False
            
                 
-            pygame.display.flip()
+        pygame.display.flip()
 
 
-            clock.tick(8)
+        clock.tick(8)
 
     pygame.quit()
 #main()
