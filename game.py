@@ -32,8 +32,8 @@ def main():
                     color(x, y, (3, 150, 40))
 
         for i in range(120):  
-          a = (i, 31)
-          b = (i, 32)
+          a = (i, 32)
+          b = (i, 31)
           c = (i, 33)
           path.append(a)
           path.append(b)
@@ -64,12 +64,12 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-           
+        monstre()
                 
-            pygame.display.flip()
+        pygame.display.flip()
 
 
-            clock.tick(8)
+        clock.tick(8)
 
     pygame.quit()
 #main()
