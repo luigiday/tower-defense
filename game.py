@@ -4,7 +4,9 @@ from time import sleep
 import ui_tooling #utilitaire custom pour afficher des fenêtres PyQt6 (par exemple pour sélectionner une tour ou mettre en pause le jeu), correspond au fichier ui_tooling.py
 path=[]
 monstres=[]
-argent = 0 #a modifier
+argent = 350 #a modifier
+tower_dict = { "tourlectrique": 200, "sapintueur": 300, "cristalexplosif": 500} # Ne pas modifier les noms, ca casse la selection de tours (les noms sont les mêmes que ceux dans le dossier assets)
+                                                                                # C'est aussi dans le meme ordre que les boutons de ladite popup
 
 
 
@@ -60,7 +62,7 @@ def main():
 
 
 
-#bon déja g fais un chemin de base parce que blc çççççççççççççç
+#bon déja g fais un chemin de base parce que
     initi()
     monstre()
     monstre()
@@ -77,9 +79,9 @@ def main():
       for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONUP and not ui_select_lock:
                 ui_select_lock = True
-                pygame.event.set_blocked(None)  # pause events
+                pygame.event.set_blocked(None)
                 try:
-                    ui_tooling.select_tower(argent)
+                    tour_selectionnee = ui_tooling.select_tower(argent, tower_dict) # Cette fonction prend le solde actuel du joueur et un dictionnaire des tours, et retounrne celle séléctionnée par le joueur
                 except Exception as e:
                     ui_tooling.show_error_popup(e)
                 finally:
