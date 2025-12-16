@@ -46,12 +46,17 @@ def main():
           color(*b, (128, 128, 128))
           color(*c, (128, 128, 128))
     def monstre():
-        for i in range(1,len(path),3):
-           for y in range(120):
-            a=(i,32)
-            monstres.append(a)
-            color(*monstres[y], (200,0,0))
+         if len(monstres) == 0:
+               monstres.append((0, 32))  
+        
+         x, y = monstres[0]     
+         x += 1                    
+         monstres.insert(0, (x, y)) 
+         monstres.pop()
 
+    def afficher_monstre():
+      for x, y in monstres: 
+        color(x, y, (200, 0, 0))
 
 
 
@@ -66,7 +71,10 @@ def main():
 
     running = True
     while running:
-        for event in pygame.event.get():
+      initi()
+      monstre()
+      afficher_monstre()
+      for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONUP and not ui_select_lock:
                 ui_select_lock = True
                 pygame.event.set_blocked(None)  # pause events
@@ -84,12 +92,12 @@ def main():
                     running = False
            
                 
-        pygame.display.flip()
+    pygame.display.flip()
 
 
-        clock.tick(8)
+    clock.tick(8)
 
     pygame.quit()
-#main()
+main()
     
 # Ne mettez cette ligne que pr vos tests, pensez a comment out avant de commit
