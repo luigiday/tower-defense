@@ -25,13 +25,8 @@ class SnakeLauncher(QtWidgets.QMainWindow): #la classe a été en pertie (50% a 
 
         uic.loadUi("ui_launcher.ui", self)
         
-        # Créer un bouton de lancement
         self.start_button.clicked.connect(self.maingame_load)
         self.exitbtn.clicked.connect(sys.exit)
-
-        #self.lives_checkbox.setEnabled(False)
-        #self.timer_checkbox.setEnabled(False)
-        #self.speed_checkbox.setEnabled(False)
 
 
     def update_lives(self, state):
@@ -67,8 +62,6 @@ class SnakeLauncher(QtWidgets.QMainWindow): #la classe a été en pertie (50% a 
             msg.setInformativeText(f"> {str(e)}\n\nSi cette erreur arrive plusieurs fois, nous te conseillons de rapporter l'erreur aux développeurs du jeu.\n\nTu peux essayer de continuer si tu pense que l'erreur n'est pas critique, mais la stabilitée du jeu pourra être affectée.")
         else:
             msg.setInformativeText(f"> {str(e)}\n\nTu peux nous envoyer un rapport d'erreur anonyme contenant le texte de l'erreur ainsi que des infos sur ton appareil si tu est d'accord, cela nous permet de patcher les bugs du jeu.")
-
-        # Ajouter les trois boutons
         
         if debug_allow:
             continuer_btn = msg.addButton("Continuer", QMessageBox.ButtonRole.AcceptRole)
@@ -79,28 +72,21 @@ class SnakeLauncher(QtWidgets.QMainWindow): #la classe a été en pertie (50% a 
 
         msg.exec()
 
-        # Gérer la réponse
         if msg.clickedButton() == quitter_btn:
             pygame.quit()
 
         elif msg.clickedButton() == rapporter_btn:
-            # Exemple : ouvrir un lien vers un formulaire de bug ou copier le message
             pygame.quit()
             QMessageBox.information(self, "Tower Defense", "Fonction non implementée actuellement.")
-            # Ou tu peux faire autre chose ici
 
 
     def maingame_load(self):
         self.hide()
-        #root = tk.Tk()
-        #root.withdraw()
-        #game.main()
         try:
             game.main()
         except Exception as e:
             if not str(e) == "video system not initialized":
                 self.show_error_popup(e)
-        #root.destroy()
         self.show()
 
 if __name__ == "__main__":

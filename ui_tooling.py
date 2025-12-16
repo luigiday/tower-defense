@@ -1,9 +1,6 @@
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import QApplication, QMessageBox
 import pygame
-#Ce code a été patché (presence de bugs) avec ChatGPT, neanmoins le code original avait été écrit par nous
-
-tower_dict = {"sapintueur": 300, "cristalexplosif": 500, "tourlectrique": 200}
 
 def _get_app(): #Fontion écrite par chatgpt
     """Return existing QApplication or crash clearly."""
@@ -13,30 +10,50 @@ def _get_app(): #Fontion écrite par chatgpt
     return app
 
 
-def select_tower(solde):
-    _get_app()  # ensure Qt is alive
+def select_tower(solde, tower_dict):
+    _get_app()
 
     dialog = QtWidgets.QDialog()
     uic.loadUi("select_tour.ui", dialog)
 
     dialog.setWindowTitle("Sélection de tour")
 
+    solde_text = dialog.findChild(QtWidgets.QLabel, "label") # Sert a définir quel
+    placer_btn = dialog.findChild(QtWidgets.QPushButton, "placer_btn")
+    placer_btn.setEnabled(False)
+    placer_btn.clicked.connect(dialog.accept)
+    cancel_btn = dialog.findChild(QtWidgets.QPushButton, "cancel_btn")
+    cancel_btn.clicked.connect(dialog.reject)
+    solde_text.setText(f"Solde : {str(solde)} credits")
+
+    def tour_selectionne(nom): #Fonction qui s'assure que le joueur peux payer la tour
+        placer_btn.setText(f"Placer ({str(tower_dict[nom])} crédits)")
+        if tower_dict[nom] <= solde:
+            placer_btn.setEnabled(True) # Active le bouton pour placer
+        else:
+            placer_btn.setEnabled(False) # Bloque le bouton pour placer
+
+    # Debut de la partie faite par IA (mais comprise)
+    tower_buttons = [
+        btn for btn in dialog.findChildren(QtWidgets.QAbstractButton)
+        if btn.isCheckable() and btn.objectName() in tower_dict
+    ]
+
+    for btn in tower_buttons:
+        btn.toggled.connect(
+            lambda checked, name=btn.objectName(): (
+                tour_selectionne(name) if checked else None
+            )
+        )
     
+    result = dialog.exec()
+    if result == QtWidgets.QDialog.DialogCode.Accepted:
+        for btn in dialog.findChildren(QtWidgets.QAbstractButton):
+            if btn.isChecked():
+                return btn.objectName()
+        return None
 
-    #for btn in dialog.findChildren(QtWidgets.QAbstractButton):
-    #    print(f"{btn.objectName()}.clicked.connect(update_text({btn.objectName()}))")
-
-    #for btn in dialog.findChildren(QtWidgets.QAbstractButton):
-    #    btn.clicked.connect(print(btn.objectName()))
-
-    #start_button.clicked.connect(self.maingame_load)
-
-    result = dialog.exec()  # IMPORTANT
-
-    for btn in dialog.findChildren(QtWidgets.QAbstractButton):
-        if btn.isChecked():
-            return btn.objectName()
-    return None
+    # Fin du code generé par IA
 
 ERROR = '''Traceback (most recent call last):
   File "/home/flare/Lycee/1ere/Documents/NSI/Projets/projet-NSI-tower-defense/main.py", line 97, in maingame_load

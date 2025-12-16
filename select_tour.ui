@@ -39,7 +39,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Placer (X crédits)</string>
+    <string>Placer (0 crédits)</string>
    </property>
   </widget>
   <widget class="QLabel" name="titlelabel">
