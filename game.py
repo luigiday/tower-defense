@@ -100,6 +100,6 @@ def main():
     clock.tick(8)
 
     pygame.quit()
-main()
+#main()
     
 # Ne mettez cette ligne que pr vos tests, pensez a comment out avant de commit
