@@ -73,7 +73,10 @@ def main():
             color((x), y+1, couleur)
             color((x+1), y+1, couleur)
             tournb += 1
-
+    
+    def add_tower(name, coords):
+        placed_towers_coords.append(coords)
+        #placed_towers_names
 
 
 #bon déja g fais un chemin de base parce que
