@@ -5,7 +5,7 @@ screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
 def color(x, y, color):
         if x < 0 or x >= 120:
             raise IndexError(f"x out of range: must be >= 0 and < 120, got x = {x}")
-        if y < 0 or y >= 67:
+        if y < 0 or y >= 70:
             raise IndexError(f"y out of range: must be >= 0 and < 70, got y = {y}")
         pygame.draw.rect(screen, color, [x * 16, y * 16, 16, 16])
 def generation_chemin () :
