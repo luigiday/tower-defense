@@ -16,6 +16,7 @@ def main():
     clock = pygame.time.Clock()
     frozen = False
     running = True
+    font = pygame.font.SysFont(None, 24)
     clock.tick(8)
     ui_select_lock = False
     
@@ -48,18 +49,22 @@ def main():
           color(*a, (128, 128, 128))
           color(*b, (128, 128, 128))
           color(*c, (128, 128, 128))
+
+    def afficher_debug_monstres():
+        texte = f"monstres = {monstres}"
+        surface = font.render(texte, True, (255, 255, 255))
+        screen.blit(surface, (10, 10))
+
     def monstre():
-         if len(monstres) == 0:
-               monstres.append((0, 32))  
-        
-         x, y = monstres[0]     
-         x += 1                    
-         monstres.insert(0, (x, y)) 
-         monstres.pop()
+        if len(monstres) == 0:
+            monstres.append((0, 32))
+        x, y = monstres[0]
+        if x < 119:
+          monstres[0] = (x + 1, y)
 
     def afficher_monstre():
-      for x, y in monstres: 
-        color(x, y, (200, 0, 0))
+        for x, y in monstres: 
+            color(x, y, (200, 0, 0))
 
     def draw_towers(coords, dico):
         tournb = 1
@@ -81,9 +86,7 @@ def main():
 
 #bon déja g fais un chemin de base parce que
     initi()
-    #monstre()
-    #monstre()
-    draw_towers(placed_towers_coords, placed_towers_names)
+    
     
     pygame.display.update()
 
@@ -91,31 +94,33 @@ def main():
 
     running = True
     while running:
-      initi()
-      #monstre()
-      #afficher_monstre()
-      for event in pygame.event.get():
-            if event.type == pygame.MOUSEBUTTONUP and not ui_select_lock:
-                ui_select_lock = True
-                pygame.event.set_blocked(None)
-                try:
-                    tour_selectionnee = ui_tooling.select_tower(argent, tower_dict) # Cette fonction prend le solde actuel du joueur et un dictionnaire des tours, et retounrne celle séléctionnée par le joueur
-                except Exception as e:
-                    ui_tooling.show_error_popup(e)
-                finally:
-                    pygame.event.set_allowed(None)
-                    ui_select_lock = False
-                    pygame.event.clear()
+        initi()
+        monstre()
+        afficher_monstre()
+        afficher_debug_monstres()
+        draw_towers(placed_towers_coords, placed_towers_names)
+        for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONUP and not ui_select_lock:
+                    ui_select_lock = True
+                    pygame.event.set_blocked(None)
+                    try:
+                        tour_selectionnee = ui_tooling.select_tower(argent, tower_dict) # Cette fonction prend le solde actuel du joueur et un dictionnaire des tours, et retounrne celle séléctionnée par le joueur
+                    except Exception as e:
+                        ui_tooling.show_error_popup(e)
+                    finally:
+                        pygame.event.set_allowed(None)
+                        ui_select_lock = False
+                        pygame.event.clear()
 
-            if event.type == pygame.QUIT:
-                if ui_tooling.ask_for_exit():
-                    running = False
-           
+                if event.type == pygame.QUIT:
+                    if ui_tooling.ask_for_exit():
+                        running = False
+            
                 
-    pygame.display.flip()
+        pygame.display.flip()
 
 
-    clock.tick(8)
+        clock.tick(8)
 
     pygame.quit()
 main()
