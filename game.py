@@ -58,9 +58,13 @@ def main():
     def monstre():
         if len(monstres) == 0:
             monstres.append((0, 32))
+            return
         x, y = monstres[0]
         if x < 119:
           monstres[0] = (x + 1, y)
+        else:
+            monstres.pop(0)
+      
 
     def afficher_monstre():
         for x, y in monstres: 
@@ -78,6 +82,13 @@ def main():
             color((x), y+1, couleur)
             color((x+1), y+1, couleur)
             tournb += 1
+    def afficher_argent():
+       texte = f"Argent: {argent} C"
+       surface = font.render(texte, True, (255, 255, 0))  #
+      
+       screen_width = screen.get_width()
+       surface_width = surface.get_width()
+       screen.blit(surface, (screen_width - surface_width - 10, 10))
     
     def add_tower(name, coords):
         placed_towers_coords.append(coords)
@@ -98,6 +109,7 @@ def main():
         monstre()
         afficher_monstre()
         afficher_debug_monstres()
+        afficher_argent()
         draw_towers(placed_towers_coords, placed_towers_names)
         for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONUP and not ui_select_lock:
