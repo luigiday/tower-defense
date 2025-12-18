@@ -7,7 +7,8 @@ monstres=[]
 argent = 350 #a modifier
 tower_dict = { "tourlectrique": 200, "sapintueur": 300, "cristalexplosif": 500} # Ne pas modifier les noms, ca casse la selection de tours (les noms sont les mêmes que ceux dans le dossier assets)
                                                                                 # C'est aussi dans le meme ordre que les boutons de ladite popup
-
+placed_towers_names = {1: "tourlecrique"}
+placed_towers_coords = [[15,15]]
 
 
 def main():
@@ -15,7 +16,6 @@ def main():
     clock = pygame.time.Clock()
     frozen = False
     running = True
-    font = pygame.font.SysFont(None, 24)
     clock.tick(8)
     ui_select_lock = False
     
@@ -48,34 +48,40 @@ def main():
           color(*a, (128, 128, 128))
           color(*b, (128, 128, 128))
           color(*c, (128, 128, 128))
-    def afficher_debug_monstres():
-      texte = f"monstres = {monstres}"
-      surface = font.render(texte, True, (255, 255, 255))
-      screen.blit(surface, (10, 10))
-    
     def monstre():
-       if len(monstres) == 0:
-          monstres.append((0, 32))
-             
-
-       x, y = monstres[0]
-
-       if x < 119:
-          monstres[0] = (x + 1, y)
-       
-
+         if len(monstres) == 0:
+               monstres.append((0, 32))  
+        
+         x, y = monstres[0]     
+         x += 1                    
+         monstres.insert(0, (x, y)) 
+         monstres.pop()
 
     def afficher_monstre():
       for x, y in monstres: 
         color(x, y, (200, 0, 0))
 
-
+    def draw_towers(coords, dico):
+        tournb = 1
+        for i in coords:
+            if dico[tournb] == "tourlecrique":
+                couleur = (0, 4, 241)
+            x = i[0]
+            y = i[1]
+            color(x, y, couleur)
+            color((x+1), y, couleur)
+            color((x), y+1, couleur)
+            color((x+1), y+1, couleur)
+            tournb += 1
 
 
 
 #bon déja g fais un chemin de base parce que
     initi()
-
+    #monstre()
+    #monstre()
+    draw_towers(placed_towers_coords, placed_towers_names)
+    
     pygame.display.update()
 
     
@@ -83,9 +89,8 @@ def main():
     running = True
     while running:
       initi()
-      monstre()
-      afficher_monstre()
-      afficher_debug_monstres()
+      #monstre()
+      #afficher_monstre()
       for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONUP and not ui_select_lock:
                 ui_select_lock = True
@@ -104,14 +109,12 @@ def main():
                     running = False
            
                 
-      pygame.display.flip()
+    pygame.display.flip()
 
 
-      clock.tick(8)
+    clock.tick(8)
 
     pygame.quit()
 main()
-
     
-
 # Ne mettez cette ligne que pr vos tests, pensez a comment out avant de commit
