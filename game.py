@@ -8,7 +8,7 @@ def main():
     pygame.init()
     path=[]
     monstres=[]
-    argent = 350 #a modifier
+    argent = 1350 #a modifier
     tower_dict = { "tourlectrique": 200, "sapintueur": 300, "cristalexplosif": 500} # Ne pas modifier les noms, ca casse la selection de tours (les noms sont les mêmes que ceux dans le dossier assets)
                                                                                     # C'est aussi dans le meme ordre que les boutons de ladite popup
     placed_towers_names = {1: "tourlectrique"}
@@ -32,6 +32,19 @@ def main():
             raise IndexError(f"y out of range: must be >= 0 and < 70, got y = {y}")
         pygame.draw.rect(screen, color, [x * 16, y * 16, 16, 16])
 
+    def draw_chemin(x, y):
+        image = None
+        try:
+            image = pygame.image.load("Assets/soldepierre.png").convert_alpha()
+        except Exception as e:
+            ui_tooling.show_error_popup(e)
+            image = None
+
+        if image:
+            screen.blit(image, (x * 16, y * 16))
+        else:
+            pygame.draw.rect(screen, (255, 0, 255), [x * 16, y * 16, 16, 16])
+
     def initi():
         for x in range(120):
             for y in range(66):
@@ -47,9 +60,9 @@ def main():
           path.append(a)
           path.append(b)
           path.append(c)
-          color(*a, (128, 128, 128))
-          color(*b, (128, 128, 128))
-          color(*c, (128, 128, 128))
+          draw_chemin(*a)
+          draw_chemin(*b)
+          draw_chemin(*c)
 
     def afficher_debug_monstres():
         texte = f"monstres = {monstres}"
