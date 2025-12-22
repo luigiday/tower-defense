@@ -115,8 +115,23 @@ def main():
                 if event.type == pygame.MOUSEBUTTONUP and not ui_select_lock:
                     ui_select_lock = True
                     pygame.event.set_blocked(None)
+                    coords = event.pos
+                    x = coords[0] // 16
+                    y = coords[1] // 16
+                    print(f"DEBUG : Clic détecté en {x}, {y}")
                     try:
                         tour_selectionnee = ui_tooling.select_tower(argent, tower_dict) # Cette fonction prend le solde actuel du joueur et un dictionnaire des tours, et retounrne celle séléctionnée par le joueur
+                        if tour_selectionnee is not None:
+                            prix = tower_dict[tour_selectionnee]
+                            if argent >= prix:
+                                placed_towers_coords.append(coords)
+                                placed_towers_names = {len(placed_towers_names)+1: tour_selectionnee}
+                                argent -= prix
+                                print(f"DEBUG : Tour {tour_selectionnee} placée en {x}, {y} pour {prix} C. Solde restant : {argent} C.")
+                            else:
+                                print(f"DEBUG : Fonds insuffisants pour placer la tour {tour_selectionnee} (coût : {prix} C, solde : {argent} C).")
+                        else:
+                            print("DEBUG : Aucune tour sélectionnée.")
                     except Exception as e:
                         ui_tooling.show_error_popup(e)
                     finally:
@@ -135,6 +150,6 @@ def main():
         clock.tick(8)
 
     pygame.quit()
-main()
+#main()
     
 # Ne mettez cette ligne que pr vos tests, pensez a comment out avant de commit
