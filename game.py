@@ -2,17 +2,18 @@ from random import randint
 import pygame
 from time import sleep
 import ui_tooling #utilitaire custom pour afficher des fenêtres PyQt6 (par exemple pour sélectionner une tour ou mettre en pause le jeu), correspond au fichier ui_tooling.py
-path=[]
-monstres=[]
-argent = 350 #a modifier
-tower_dict = { "tourlectrique": 200, "sapintueur": 300, "cristalexplosif": 500} # Ne pas modifier les noms, ca casse la selection de tours (les noms sont les mêmes que ceux dans le dossier assets)
-                                                                                # C'est aussi dans le meme ordre que les boutons de ladite popup
-placed_towers_names = {1: "tourlecrique"}
-placed_towers_coords = [[15,15]]
 
 
 def main():
     pygame.init()
+    path=[]
+    monstres=[]
+    argent = 350 #a modifier
+    tower_dict = { "tourlectrique": 200, "sapintueur": 300, "cristalexplosif": 500} # Ne pas modifier les noms, ca casse la selection de tours (les noms sont les mêmes que ceux dans le dossier assets)
+                                                                                    # C'est aussi dans le meme ordre que les boutons de ladite popup
+    placed_towers_names = {1: "tourlectrique"}
+    placed_towers_coords = [[15,15]]
+
     clock = pygame.time.Clock()
     frozen = False
     running = True
@@ -71,17 +72,27 @@ def main():
             color(x, y, (200, 0, 0))
 
     def draw_towers(coords, dico):
-        tournb = 1
-        for i in coords:
-            if dico[tournb] == "tourlecrique":
-                couleur = (0, 4, 241)
+        for idx, i in enumerate(coords, start=1):
+            name = dico.get(idx)
+            image = None
+            try:
+                if name == "tourlectrique":
+                    image = pygame.image.load("Assets/tourlectrique.png").convert_alpha()
+                elif name == "sapintueur":
+                    image = pygame.image.load("Assets/sapintueur.png").convert_alpha()
+                elif name == "cristalexplosif":
+                    image = pygame.image.load("Assets/cristalexplosif.png").convert_alpha()
+            except Exception as e:
+                ui_tooling.show_error_popup(e)
+                image = None
+
             x = i[0]
             y = i[1]
-            color(x, y, couleur)
-            color((x+1), y, couleur)
-            color((x), y+1, couleur)
-            color((x+1), y+1, couleur)
-            tournb += 1
+            if image:
+                screen.blit(image, (x * 16, y * 16))
+            else:
+                # Fallback: draw a visible placeholder if image missing or unknown
+                pygame.draw.rect(screen, (255, 0, 255), [x * 16, y * 16, 16, 16])
     def afficher_argent():
        texte = f"Argent: {argent} C"
        surface = font.render(texte, True, (255, 255, 0))  #
@@ -124,8 +135,13 @@ def main():
                         if tour_selectionnee is not None:
                             prix = tower_dict[tour_selectionnee]
                             if argent >= prix:
-                                placed_towers_coords.append(coords)
-                                placed_towers_names = {len(placed_towers_names)+1: tour_selectionnee}
+                                placed_towers_coords.append([x, y])
+                                # add new mapping instead of overwriting the dict
+                                try:
+                                    new_id = max(placed_towers_names.keys()) + 1
+                                except ValueError:
+                                    new_id = 1
+                                placed_towers_names[new_id] = tour_selectionnee
                                 argent -= prix
                                 print(f"DEBUG : Tour {tour_selectionnee} placée en {x}, {y} pour {prix} C. Solde restant : {argent} C.")
                             else:
