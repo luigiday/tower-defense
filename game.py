@@ -8,6 +8,8 @@ def main():
     pygame.init()
     path=[]
     monstres=[]
+    tick=0
+    pv=100
     argent = 1350 #a modifier
     tower_dict = { "tourlectrique": 200, "sapintueur": 300, "cristalexplosif": 500} # Ne pas modifier les noms, ca casse la selection de tours (les noms sont les mêmes que ceux dans le dossier assets)
                                                                                     # C'est aussi dans le meme ordre que les boutons de ladite popup
@@ -63,24 +65,53 @@ def main():
           draw_chemin(*a)
           draw_chemin(*b)
           draw_chemin(*c)
+    def chateau():
+          nonlocal pv
+          for m in monstres[:]: 
+             x, y = m
+             if x>=119:
+              pv-=10
+             if pv==0:
+                 sleep(10)
 
     def afficher_debug_monstres():
         texte = f"monstres = {monstres}"
         surface = font.render(texte, True, (255, 255, 255))
         screen.blit(surface, (10, 10))
+    def afficher_lesticks():
+        texte = f"tick: = {tick}"
+        surface = font.render(texte, True, (255, 255, 255))
+        screen.blit(surface, (10, 40))
+    def afficher_pv():
+        texte = f"pv: = {pv}"
+        surface = font.render(texte, True, (255, 255, 255))
+        screen.blit(surface, (10, 80))
 
+
+
+    
+        
+    
     def monstre():
-        if len(monstres) == 0:
-            monstres.append((0, 32))
-            return
-        x, y = monstres[0]
-        if x < 119:
-          monstres[0] = (x + 1, y)
-        else:
-            monstres.pop(0)
+       
+      if tick % 40 == 0:
+        monstres.append([0, 32])
+
+
+
+      for m in monstres:
+       m[0] += 1
+ 
+      for m in monstres[:]:
+        if m[0] >= 120:
+         monstres.remove(m)
+
+       
+        
       
 
     def afficher_monstre():
+        
         for x, y in monstres: 
             color(x, y, (200, 0, 0))
 
@@ -131,9 +162,12 @@ def main():
     while running:
         initi()
         monstre()
+        chateau()
         afficher_monstre()
         afficher_debug_monstres()
         afficher_argent()
+        afficher_lesticks()
+        afficher_pv()
         draw_towers(placed_towers_coords, placed_towers_names)
         for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONUP and not ui_select_lock:
@@ -171,14 +205,17 @@ def main():
                 if event.type == pygame.QUIT:
                     if ui_tooling.ask_for_exit():
                         running = False
-            
+ 
                 
         pygame.display.flip()
 
 
         clock.tick(8)
+        tick+=1
+     
+    
 
     pygame.quit()
-#main()
+main()
     
 # Ne mettez cette ligne que pr vos tests, pensez a comment out avant de commit
