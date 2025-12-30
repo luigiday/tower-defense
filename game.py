@@ -114,7 +114,32 @@ def main():
         
         for x, y in monstres: 
             color(x, y, (200, 0, 0))
+   
+   
+    def draw_chateau():
+        texture = pygame.image.load("Assets/chateau.png").convert_alpha()
+        texture2= pygame.image.load("Assets/chateau cassé.png").convert_alpha()
+        texture3= pygame.image.load("Assets/chateau cassé2.png").convert_alpha()
+        texture4= pygame.image.load("Assets/chateau cassé3.png").convert_alpha()
+        texture5= pygame.image.load("Assets/chateau cassé4.png").convert_alpha()
+        if pv<=20:
+            screen.blit(texture5, (1835, 465))
+        elif pv<=40:
+            screen.blit(texture4, (1835, 465))
+        elif pv<=60:
+            screen.blit(texture3, (1835, 465))
+        elif pv<=80:
+            screen.blit(texture2, (1835, 465))
+        else:
+ 
+          screen.blit(texture, (1845, 465))
 
+        
+          
+
+
+    
+    
     def draw_towers(coords, dico):
         for idx, i in enumerate(coords, start=1):
             name = dico.get(idx)
@@ -168,6 +193,7 @@ def main():
         afficher_argent()
         afficher_lesticks()
         afficher_pv()
+        draw_chateau()
         draw_towers(placed_towers_coords, placed_towers_names)
         for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONUP and not ui_select_lock:
@@ -210,7 +236,7 @@ def main():
         pygame.display.flip()
 
 
-        clock.tick(8)
+        clock.tick(160)
         tick+=1
      
     
