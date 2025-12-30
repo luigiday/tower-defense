@@ -236,7 +236,7 @@ def main():
         pygame.display.flip()
 
 
-        clock.tick(160)
+        clock.tick(8)
         tick+=1
      
     
