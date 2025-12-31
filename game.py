@@ -7,6 +7,7 @@ import ui_tooling #utilitaire custom pour afficher des fenêtres PyQt6 (par exem
 
 def main():
     pygame.init()
+    pygame.mixer.init()
     vague=1
     path=[]
     monstres=[]
@@ -26,6 +27,9 @@ def main():
     placed_towers_coords = [[15,15]]
 
     clock = pygame.time.Clock()
+    pygame.mixer.music.load("Assets/musique.mp3")
+    pygame.mixer.music.set_volume(0.05)  # entre 0 et 1
+    pygame.mixer.music.play(-1)     
     frozen = False
     running = True
     font = pygame.font.SysFont(None, 24)
@@ -59,12 +63,7 @@ def main():
 
 
     def initi():
-        for x in range(120):
-            for y in range(68):
-                if (x + y) % 2 == 0:
-                    color(x, y, (10,68,23))
-                else:
-                    color(x, y, (10,68,23))
+
 
         for i in range(120):  
           a = (i, 31)
@@ -84,7 +83,7 @@ def main():
               
               pv-=10
 
-             #if pv==0:
+           
                  
                  
 
@@ -192,8 +191,15 @@ def main():
         
 
         
-        
-
+    def draw_fleurs():
+       texture = pygame.image.load("Assets/fleurs.png").convert_alpha()
+       texture = pygame.transform.scale(texture, (410,410)) 
+       for x in range(1,1800,320):
+        screen.blit(texture, (x, 1))
+       for x in range(1,1800,320):
+        screen.blit(texture, (x,820))
+       for x in range(1,1800,320):
+        screen.blit(texture, (x, 410))
 
     def draw_chateau():
         texture = pygame.image.load("Assets/chateau.png").convert_alpha()
@@ -281,7 +287,9 @@ def main():
 
     running = True
     while running:
+        draw_fleurs()
         initi()
+     
         vagues()
         monstre()
         chateau()
@@ -338,7 +346,7 @@ def main():
         pygame.display.flip()
 
 
-        clock.tick(118)
+        clock.tick(8)
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE] :
             clock.tick(160)
@@ -349,6 +357,6 @@ def main():
     
 
     pygame.quit()
-#main()
+main()
     
 # Ne mettez cette ligne que pr vos tests, pensez a comment out avant de commit
