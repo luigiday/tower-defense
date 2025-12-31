@@ -29,7 +29,9 @@ def main():
     clock = pygame.time.Clock()
     pygame.mixer.music.load("Assets/musique.mp3")
     pygame.mixer.music.set_volume(0.05)  # entre 0 et 1
-    pygame.mixer.music.play(-1)     
+    pygame.mixer.music.play(-1)  
+    dégats = pygame.mixer.Sound("Assets/dégats.mp3")   
+    dégats.set_volume(0.1)
     frozen = False
     running = True
     font = pygame.font.SysFont(None, 24)
@@ -82,6 +84,7 @@ def main():
              if x>=119:
               
               pv-=10
+              dégats.play()
 
            
                  
@@ -357,6 +360,6 @@ def main():
     
 
     pygame.quit()
-main()
+#main()
     
 # Ne mettez cette ligne que pr vos tests, pensez a comment out avant de commit
