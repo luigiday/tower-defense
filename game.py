@@ -6,11 +6,13 @@ import ui_tooling #utilitaire custom pour afficher des fenêtres PyQt6 (par exem
 
 def main():
     pygame.init()
+    vague=1
     path=[]
     monstres=[]
     tick=0
     pv=100
     arbres=[]
+    
     argent = 1350 #a modifier
     tower_dict = { "tourlectrique": 200, "sapintueur": 300, "cristalexplosif": 500} # Ne pas modifier les noms, ca casse la selection de tours (les noms sont les mêmes que ceux dans le dossier assets)
                                                                                     # C'est aussi dans le meme ordre que les boutons de ladite popup
@@ -73,7 +75,9 @@ def main():
           for m in monstres[:]: 
              x, y = m
              if x>=119:
+              
               pv-=10
+
              #if pv==0:
                  
                  
@@ -99,14 +103,43 @@ def main():
             screen.blit(surface, (700, 435))
   
 
-
+    def vagues():
+      global vague
+      if tick <= 300:
+        vague = 1
+      elif tick <= 600:
+        vague = 2
+      elif tick <= 800:
+        vague = 3
+      elif tick <= 1100:
+        vague = 4
+      else:
+        vague = 4 
+      font = pygame.font.SysFont(None, 100)
+      texte = f"VAGUE:{vague}"
+      surface = font.render(texte, True, (0, 0, 200))
+      screen.blit(surface, (830, 10))
     
         
     
     def monstre():
+      global vague
+      if vague==1:
        
-      if tick % 40 == 0:
-        monstres.append([0, 32])
+        if tick % 40 == 0:
+          monstres.append([0, 32])
+      elif vague==2:
+        if tick % 30 == 0:
+          monstres.append([0, 32])
+
+      elif vague==3:
+        if tick % 20 == 0:
+          monstres.append([0, 32])
+
+      elif vague==4:
+        if tick % 10 == 0:
+          monstres.append([0, 32])
+
 
 
 
@@ -242,6 +275,7 @@ def main():
     running = True
     while running:
         initi()
+        vagues()
         monstre()
         chateau()
         generearbre()
@@ -254,6 +288,7 @@ def main():
         afficher_pv()
         afficher_portail()
         draw_chateau()
+        
         draw_towers(placed_towers_coords, placed_towers_names)
         for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONUP and not ui_select_lock:
