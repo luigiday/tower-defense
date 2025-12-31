@@ -69,6 +69,45 @@ TypeError: argument 1 has unexpected type 'NoneType'
 Abandon                    (core dumped)/bin/python /home/flare/Lycee/1ere/Documents/NSI/Projets/projet-NSI-tower-defense/main.py
 '''
 
+def gameover(towerdict, depenses, ennemis_tues, duree, vagues):
+    _get_app()
+
+    dialog = QtWidgets.QDialog()
+    uic.loadUi("gameover.ui", dialog)
+
+    dialog.setWindowTitle("Fin de partie - Tower Defense")
+
+    # defeir les valeurs dans la popup
+    tours_label = dialog.findChild(QtWidgets.QLabel, "tours")
+    vagues_label = dialog.findChild(QtWidgets.QLabel, "vagues")
+    depenses_label = dialog.findChild(QtWidgets.QLabel, "depenses")
+    ennemis_tues_label = dialog.findChild(QtWidgets.QLabel, "ennemis_tues")
+    duree_label = dialog.findChild(QtWidgets.QLabel, "duree")
+    def convertir_duree_en_MMSS(duree):
+        m = int(duree // 60)
+        s = int(duree % 60)
+        return f"{m}:{s}"
+    tours_label.setText(f"{str(len(towerdict))}")
+    duree_label.setText(f"{convertir_duree_en_MMSS(duree)}")
+    vagues_label.setText(f"{str(vagues)}")
+    depenses_label.setText(f"{str(depenses)} C")
+    ennemis_tues_label.setText(f"{str(ennemis_tues)}")
+
+    rejouer_btn = dialog.findChild(QtWidgets.QPushButton, "rejouer_btn")
+    rejouer_btn.setDefault(True)
+    rejouer_btn.clicked.connect(dialog.accept)
+    menu_btn = dialog.findChild(QtWidgets.QPushButton, "menu_btn")
+    menu_btn.clicked.connect(dialog.reject)
+    
+
+    
+    result = dialog.exec()
+    if result == QtWidgets.QDialog.DialogCode.Accepted:
+        return None
+    else:
+        if QMessageBox.question(None, "Quitter - Tower Defense", "Voulez-vous vraiment retourner au menu principal ?", QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No) == QMessageBox.StandardButton.Yes:
+            pygame.quit()
+
 def show_error_popup(e):
     _get_app()
 

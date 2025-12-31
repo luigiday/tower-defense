@@ -67,17 +67,14 @@ class SnakeLauncher(QtWidgets.QMainWindow): #la classe a été en pertie (50% a 
             continuer_btn = msg.addButton("Continuer", QMessageBox.ButtonRole.AcceptRole)
             quitter_btn = msg.addButton("Quitter", QMessageBox.ButtonRole.RejectRole)
         else:
-            quitter_btn = msg.addButton("Ne pas envoyer", QMessageBox.ButtonRole.RejectRole)
-        rapporter_btn = msg.addButton("Envoyer le rapport", QMessageBox.ButtonRole.ActionRole)
+            quitter_btn = msg.addButton("Quitter", QMessageBox.ButtonRole.RejectRole)
 
         msg.exec()
 
         if msg.clickedButton() == quitter_btn:
             pygame.quit()
 
-        elif msg.clickedButton() == rapporter_btn:
-            pygame.quit()
-            QMessageBox.information(self, "Tower Defense", "Fonction non implementée actuellement.")
+        
 
 
     def maingame_load(self):

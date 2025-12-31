@@ -1,6 +1,7 @@
 from random import randint
 import pygame
 from time import sleep
+from time import time
 import ui_tooling #utilitaire custom pour afficher des fenêtres PyQt6 (par exemple pour sélectionner une tour ou mettre en pause le jeu), correspond au fichier ui_tooling.py
 
 
@@ -12,6 +13,11 @@ def main():
     tick=0
     pv=100
     arbres=[]
+    # Variables de stats
+    debut = time()
+    depenses = 0
+    ennemis_tues = 0
+
     
     argent = 1350 #a modifier
     tower_dict = { "tourlectrique": 200, "sapintueur": 300, "cristalexplosif": 500} # Ne pas modifier les noms, ca casse la selection de tours (les noms sont les mêmes que ceux dans le dossier assets)
@@ -96,11 +102,13 @@ def main():
         surface = font.render(texte, True, (255, 0, 0))
         screen.blit(surface, (1850, 415))
     def afficher_perte():
+        global vague
         font = pygame.font.SysFont(None, 240)
         texte = f"PERDU!"
         surface = font.render(texte, True, (255, 0, 0))
         if pv<=0:
             screen.blit(surface, (700, 435))
+            ui_tooling.gameover(placed_towers_names, depenses, ennemis_tues, time() - debut, vague)
   
 
     def vagues():
@@ -241,7 +249,6 @@ def main():
             if image:
                 screen.blit(image, (x * 16, y * 16))
             else:
-                # Fallback: draw a visible placeholder if image missing or unknown
                 pygame.draw.rect(screen, (255, 0, 255), [x * 16, y * 16, 16, 16])
     def afficher_argent():
        image = pygame.image.load("Assets/Coin.png").convert_alpha()
@@ -304,7 +311,6 @@ def main():
                             prix = tower_dict[tour_selectionnee]
                             if argent >= prix:
                                 placed_towers_coords.append([x, y])
-                                # add new mapping instead of overwriting the dict
                                 try:
                                     new_id = max(placed_towers_names.keys()) + 1
                                 except ValueError:
@@ -312,6 +318,7 @@ def main():
                                 placed_towers_names[new_id] = tour_selectionnee
                                 argent -= prix
                                 print(f"DEBUG : Tour {tour_selectionnee} placée en {x}, {y} pour {prix} C. Solde restant : {argent} C.")
+                                depenses += prix
                             else:
                                 print(f"DEBUG : Fonds insuffisants pour placer la tour {tour_selectionnee} (coût : {prix} C, solde : {argent} C).")
                         else:
@@ -331,7 +338,7 @@ def main():
         pygame.display.flip()
 
 
-        clock.tick(8)
+        clock.tick(118)
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE] :
             clock.tick(160)
@@ -342,6 +349,6 @@ def main():
     
 
     pygame.quit()
-main()
+#main()
     
 # Ne mettez cette ligne que pr vos tests, pensez a comment out avant de commit
