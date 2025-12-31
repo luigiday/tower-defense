@@ -10,6 +10,7 @@ def main():
     monstres=[]
     tick=0
     pv=100
+    arbres=[]
     argent = 1350 #a modifier
     tower_dict = { "tourlectrique": 200, "sapintueur": 300, "cristalexplosif": 500} # Ne pas modifier les noms, ca casse la selection de tours (les noms sont les mêmes que ceux dans le dossier assets)
                                                                                     # C'est aussi dans le meme ordre que les boutons de ladite popup
@@ -47,13 +48,15 @@ def main():
         else:
             pygame.draw.rect(screen, (255, 0, 255), [x * 16, y * 16, 16, 16])
 
+
+
     def initi():
         for x in range(120):
             for y in range(66):
                 if (x + y) % 2 == 0:
-                    color(x, y, (80, 200, 104))
+                    color(x, y, (10,68,23))
                 else:
-                    color(x, y, (3, 150, 40))
+                    color(x, y, (10,68,23))
 
         for i in range(120):  
           a = (i, 31)
@@ -71,22 +74,30 @@ def main():
              x, y = m
              if x>=119:
               pv-=10
-             if pv==0:
-                 sleep(10)
+             #if pv==0:
+                 
+                 
 
     def afficher_debug_monstres():
         texte = f"monstres = {monstres}"
-        surface = font.render(texte, True, (255, 255, 255))
+        surface = font.render(texte, True, (255, 0, 255))
         screen.blit(surface, (10, 10))
     def afficher_lesticks():
         texte = f"tick: = {tick}"
-        surface = font.render(texte, True, (255, 255, 255))
+        surface = font.render(texte, True, (100, 15, 255))
         screen.blit(surface, (10, 40))
     def afficher_pv():
-        texte = f"pv: = {pv}"
-        surface = font.render(texte, True, (255, 255, 255))
-        screen.blit(surface, (10, 80))
-
+        font = pygame.font.SysFont(None, 30)
+        texte = f"Pv:{pv}"
+        surface = font.render(texte, True, (255, 0, 0))
+        screen.blit(surface, (1850, 415))
+    def afficher_perte():
+        font = pygame.font.SysFont(None, 240)
+        texte = f"PERDU!"
+        surface = font.render(texte, True, (255, 0, 0))
+        if pv<=0:
+            screen.blit(surface, (700, 435))
+  
 
 
     
@@ -111,28 +122,62 @@ def main():
       
 
     def afficher_monstre():
+        texture= pygame.image.load("Assets/zombie.png").convert_alpha()
+        texture = pygame.transform.scale(texture, (50,50)) 
+        for m in monstres:
+           x,y=m
+           y=y-1
+           screen.blit(texture, (x*16,y*16))
+       
+   
+    def generearbre():
+     
+        texture = pygame.image.load("Assets/arbre.png").convert_alpha()
+        while len(arbres)<35:
+           a = randint(0,110)
+           b = randint(5,60)
+           while b == 20 or b == 21 or b == 22 or b == 23 or b == 24 or b == 25 or b == 26 or b == 27 or b == 28 or b == 29 or b == 30 or b == 31 or b == 32 or b == 33 or b == 34:
+                    a=randint(10,110)
+                    b=randint(5,60)
+           arbres.append((a,b))
         
-        for x, y in monstres: 
-            color(x, y, (200, 0, 0))
-   
-   
+    def draw_arbre():
+       texture = pygame.image.load("Assets/arbre.png").convert_alpha()
+       for a,b in arbres:
+        screen.blit(texture, (a*16, b*16))
+        
+
+        
+        
+
+
     def draw_chateau():
         texture = pygame.image.load("Assets/chateau.png").convert_alpha()
+        texture = pygame.transform.scale(texture, (130,130)) 
         texture2= pygame.image.load("Assets/chateau cassé.png").convert_alpha()
+        texture2 = pygame.transform.scale(texture2, (130,130)) 
         texture3= pygame.image.load("Assets/chateau cassé2.png").convert_alpha()
+        texture3 = pygame.transform.scale(texture3, (130,130)) 
         texture4= pygame.image.load("Assets/chateau cassé3.png").convert_alpha()
+        texture4 = pygame.transform.scale(texture4, (130,130)) 
         texture5= pygame.image.load("Assets/chateau cassé4.png").convert_alpha()
-        if pv<=20:
-            screen.blit(texture5, (1835, 465))
+        texture5 = pygame.transform.scale(texture5, (130,130)) 
+        texture6= pygame.image.load("Assets/FIN!.png").convert_alpha()
+        texture6 = pygame.transform.scale(texture6, (130,130)) 
+        if pv<=0:
+            screen.blit(texture6, (1834, 440))
+        elif pv<=20:
+            screen.blit(texture5, (1834, 440))
         elif pv<=40:
-            screen.blit(texture4, (1835, 465))
+            screen.blit(texture4, (1834, 440))
         elif pv<=60:
-            screen.blit(texture3, (1835, 465))
+            screen.blit(texture3, (1834, 440))
         elif pv<=80:
-            screen.blit(texture2, (1835, 465))
+            screen.blit(texture2, (1834, 440))
+
         else:
  
-          screen.blit(texture, (1845, 465))
+          screen.blit(texture, (1834, 440))
 
         
           
@@ -163,12 +208,20 @@ def main():
                 # Fallback: draw a visible placeholder if image missing or unknown
                 pygame.draw.rect(screen, (255, 0, 255), [x * 16, y * 16, 16, 16])
     def afficher_argent():
-       texte = f"Argent: {argent} C"
-       surface = font.render(texte, True, (255, 255, 0))  #
+       image = pygame.image.load("Assets/Coin.png").convert_alpha()
+
+
+       image = pygame.transform.scale(image, (60,60)) 
+
+
+       screen.blit(image, (1855, 5))
+       font = pygame.font.SysFont(None, 50)
+       texte = f"Argent: {argent} "
+       surface = font.render(texte, True, (255, 255, 0))  
       
        screen_width = screen.get_width()
        surface_width = surface.get_width()
-       screen.blit(surface, (screen_width - surface_width - 10, 10))
+       screen.blit(surface, (screen_width - surface_width - 60, 20))
     
     def add_tower(name, coords):
         placed_towers_coords.append(coords)
@@ -188,10 +241,13 @@ def main():
         initi()
         monstre()
         chateau()
+        generearbre()
         afficher_monstre()
         afficher_debug_monstres()
+        draw_arbre()
         afficher_argent()
         afficher_lesticks()
+        afficher_perte()
         afficher_pv()
         draw_chateau()
         draw_towers(placed_towers_coords, placed_towers_names)
@@ -236,7 +292,7 @@ def main():
         pygame.display.flip()
 
 
-        clock.tick(8)
+        clock.tick(160)
         tick+=1
      
     
