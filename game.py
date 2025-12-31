@@ -331,7 +331,7 @@ def main():
         pygame.display.flip()
 
 
-        clock.tick(160)
+        clock.tick(8)
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE] :
             clock.tick(160)
