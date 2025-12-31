@@ -31,7 +31,7 @@ def main():
     def color(x, y, color):
         if x < 0 or x >= 120:
             raise IndexError(f"x out of range: must be >= 0 and < 120, got x = {x}")
-        if y < 0 or y >= 67:
+        if y < 0 or y >= 70:
             raise IndexError(f"y out of range: must be >= 0 and < 70, got y = {y}")
         pygame.draw.rect(screen, color, [x * 16, y * 16, 16, 16])
 
@@ -52,7 +52,7 @@ def main():
 
     def initi():
         for x in range(120):
-            for y in range(66):
+            for y in range(68):
                 if (x + y) % 2 == 0:
                     color(x, y, (10,68,23))
                 else:
@@ -120,6 +120,9 @@ def main():
        
         
       
+    def afficher_portail():
+        texture= pygame.image.load("Assets/portail.png").convert_alpha()
+        screen.blit(texture, (0,450))
 
     def afficher_monstre():
         texture= pygame.image.load("Assets/zombie.png").convert_alpha()
@@ -249,6 +252,7 @@ def main():
         afficher_lesticks()
         afficher_perte()
         afficher_pv()
+        afficher_portail()
         draw_chateau()
         draw_towers(placed_towers_coords, placed_towers_names)
         for event in pygame.event.get():
@@ -293,6 +297,11 @@ def main():
 
 
         clock.tick(160)
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE] :
+            clock.tick(160)
+
+        
         tick+=1
      
     
