@@ -353,7 +353,7 @@ def main():
 
 
         clock.tick(
-           160
+           8
         )
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE] :
@@ -365,6 +365,6 @@ def main():
     
 
     pygame.quit()
-main()
+#main()
     
 # Ne mettez cette ligne que pr vos tests, pensez a comment out avant de commit
