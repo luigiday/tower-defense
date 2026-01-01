@@ -55,20 +55,6 @@ def select_tower(solde, tower_dict):
 
     # Fin du code generé par IA
 
-ERROR = '''Traceback (most recent call last):
-  File "/home/flare/Lycee/1ere/Documents/NSI/Projets/projet-NSI-tower-defense/main.py", line 97, in maingame_load
-    game.main()
-    ~~~~~~~~~^^
-  File "/home/flare/Lycee/1ere/Documents/NSI/Projets/projet-NSI-tower-defense/game.py", line 74, in main
-    ui_tooling.select_tower(argent)
-    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^
-  File "/home/flare/Lycee/1ere/Documents/NSI/Projets/projet-NSI-tower-defense/ui_tooling.py", line 30, in select_tower
-    btn.clicked.connect(print(btn.objectName()))
-    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
-TypeError: argument 1 has unexpected type 'NoneType'
-Abandon                    (core dumped)/bin/python /home/flare/Lycee/1ere/Documents/NSI/Projets/projet-NSI-tower-defense/main.py
-'''
-
 def gameover(towerdict, depenses, ennemis_tues, duree, vagues):
     _get_app()
 
@@ -86,12 +72,12 @@ def gameover(towerdict, depenses, ennemis_tues, duree, vagues):
     def convertir_duree_en_MMSS(duree):
         m = int(duree // 60)
         s = int(duree % 60)
-        return f"{m}:{s}"
-    tours_label.setText(f"{str(len(towerdict))}")
+        return f"{m:02}:{s:02}" # le :02 affiche toujours 2 chiffres pour que le temps soit propre
+    tours_label.setText(f"{len(towerdict):02}")
     duree_label.setText(f"{convertir_duree_en_MMSS(duree)}")
-    vagues_label.setText(f"{str(vagues)}")
-    depenses_label.setText(f"{str(depenses)} C")
-    ennemis_tues_label.setText(f"{str(ennemis_tues)}")
+    vagues_label.setText(f"{vagues:02}")
+    depenses_label.setText(f"{depenses:04} C")
+    ennemis_tues_label.setText(f"{ennemis_tues:03}")
 
     rejouer_btn = dialog.findChild(QtWidgets.QPushButton, "rejouer_btn")
     rejouer_btn.setDefault(True)
