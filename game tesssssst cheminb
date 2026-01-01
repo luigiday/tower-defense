@@ -13,6 +13,7 @@ def main():
     monstres=[]
     tick=0
     pv=100
+    chemins=[]
     arbres=[]
     # Variables de stats
     debut = time()
@@ -60,25 +61,56 @@ def main():
             image = None
 
         if image:
+            image = pygame.transform.scale(image, (30,30)) 
             screen.blit(image, (x * 16, y * 16))
         else:
             pygame.draw.rect(screen, (255, 0, 255), [x * 16, y * 16, 16, 16])
 
-
+ 
 
     def initi():
+     y1=randint(10,60)
+     x1=randint(10,20)
+     chemins.append((0, y1)) 
+     
+     for s in range(1,x1):
+      chemins.append((s,y1))
+      x=x1
+     chemins.append((x, y1)) 
+    
+     while x<=95:
+       
+       add=randint(5,10)
+       if y1<30:
+        
+        for m in range(add):
+         y1+=1
+         chemins.append((x,y1))
+       else:
+        
+        for m in range(add):
+         y1-=1
+         chemins.append((x,y1))
+       for n in range(randint(10,20)):
+            x += 1
+            chemins.append((x, y1))
+     xfin=120-x
+     if y1<32:
+      yfin=32-y1
+      for k in range(yfin):
+       y1+=1
+       chemins.append((x,y1))
 
+     else:
+      yfin=abs(32-y1)
+      for k in range(yfin):
+        y1-=1
+        chemins.append((x,y1))
+     for n in range(xfin):
+            x += 1
+            chemins.append((x,y1))
 
-        for i in range(120):  
-          a = (i, 31)
-          b = (i, 32)
-          c = (i, 33)
-          path.append(a)
-          path.append(b)
-          path.append(c)
-          draw_chemin(*a)
-          draw_chemin(*b)
-          draw_chemin(*c)
+    
     def chateau():
           nonlocal pv
           for m in monstres[:]: 
@@ -90,9 +122,12 @@ def main():
              if pv<=0:
               pygame.mixer.music.pause()
               loose.play()
-                 
-                 
 
+                 
+    def afficher_debug_chemin():
+        texte = f"chemins = {chemins[0]}"
+        surface = font.render(texte, True, (255, 0, 255))
+        screen.blit(surface, (300, 10))
     def afficher_debug_monstres():
         texte = f"monstres = {monstres}"
         surface = font.render(texte, True, (255, 0, 255))
@@ -115,7 +150,9 @@ def main():
             screen.blit(surface, (700, 435))
             ui_tooling.gameover(placed_towers_names, depenses, ennemis_tues, time() - debut, vague)
   
-
+    def afficher_chemin():
+     for x, y in chemins:
+        draw_chemin(x, y)
     def vagues():
       global vague
       if tick <= 300:
@@ -167,8 +204,11 @@ def main():
         
       
     def afficher_portail():
+        x,y=chemins[0]
+        
+        y=y-4
         texture= pygame.image.load("Assets/portail.png").convert_alpha()
-        screen.blit(texture, (0,450))
+        screen.blit(texture, (x*16,y*16))
 
     def afficher_monstre():
         texture= pygame.image.load("Assets/zombie.png").convert_alpha()
@@ -294,11 +334,12 @@ def main():
     running = True
     while running:
         draw_fleurs()
-        initi()
-     
+
+        afficher_chemin()
         vagues()
         monstre()
         chateau()
+        afficher_debug_chemin()
         generearbre()
         afficher_monstre()
         afficher_debug_monstres()
@@ -365,6 +406,6 @@ def main():
     
 
     pygame.quit()
-#main()
+main()
     
 # Ne mettez cette ligne que pr vos tests, pensez a comment out avant de commit
