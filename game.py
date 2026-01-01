@@ -32,6 +32,8 @@ def main():
     pygame.mixer.music.play(-1)  
     dégats = pygame.mixer.Sound("Assets/dégats.mp3")   
     dégats.set_volume(0.1)
+    loose=pygame.mixer.Sound("Assets/loose.mp3")   
+    loose.set_volume(0.1)
     frozen = False
     running = True
     font = pygame.font.SysFont(None, 24)
@@ -85,8 +87,9 @@ def main():
               
               pv-=10
               dégats.play()
-
-           
+             if pv<=0:
+              pygame.mixer.music.pause()
+              loose.play()
                  
                  
 
@@ -191,7 +194,7 @@ def main():
        texture = pygame.image.load("Assets/arbre.png").convert_alpha()
        for a,b in arbres:
         screen.blit(texture, (a*16, b*16))
-        
+    
 
         
     def draw_fleurs():
@@ -349,7 +352,9 @@ def main():
         pygame.display.flip()
 
 
-        clock.tick(8)
+        clock.tick(
+           160
+        )
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE] :
             clock.tick(160)
@@ -360,6 +365,6 @@ def main():
     
 
     pygame.quit()
-#main()
+main()
     
 # Ne mettez cette ligne que pr vos tests, pensez a comment out avant de commit
