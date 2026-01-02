@@ -13,7 +13,7 @@ def main():
     monstres=[]
     monstres_pv=[]
     tick=0
-    pv=10
+    pv=100
     arbres=[]
     # Variables de stats
     debut = time()
