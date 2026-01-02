@@ -89,10 +89,10 @@ def gameover(towerdict, depenses, ennemis_tues, duree, vagues):
     
     result = dialog.exec()
     if result == QtWidgets.QDialog.DialogCode.Accepted:
-        return None
+        return True
     else:
-        if QMessageBox.question(None, "Quitter - Tower Defense", "Voulez-vous vraiment retourner au menu principal ?", QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No) == QMessageBox.StandardButton.Yes:
-            pygame.quit()
+        return False
+        
 
 def show_error_popup(e):
     _get_app()

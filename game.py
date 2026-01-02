@@ -13,7 +13,7 @@ def main():
     monstres=[]
     monstres_pv=[]
     tick=0
-    pv=100
+    pv=10
     arbres=[]
     # Variables de stats
     debut = time()
@@ -118,7 +118,13 @@ def main():
         surface = font.render(texte, True, (255, 0, 0))
         if pv<=0:
             screen.blit(surface, (700, 435))
-            ui_tooling.gameover(placed_towers_names, depenses, ennemis_tues, time() - debut, vague)
+            if ui_tooling.gameover(placed_towers_names, depenses, ennemis_tues, time() - debut, vague):
+                running = False
+                pygame.quit()
+                main()
+            else:
+                running = False
+                pygame.quit()
   
 
     def vagues():
