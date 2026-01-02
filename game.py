@@ -11,6 +11,7 @@ def main():
     vague=1
     path=[]
     monstres=[]
+    monstres_pv=[]
     tick=0
     pv=100
     arbres=[]
@@ -98,10 +99,13 @@ def main():
         texte = f"monstres = {monstres}"
         surface = font.render(texte, True, (255, 0, 255))
         screen.blit(surface, (10, 10))
+        texte = f"monstres pv = {monstres_pv}"
+        surface = font.render(texte, True, (255, 0, 255))
+        screen.blit(surface, (10, 40))
     def afficher_lesticks():
         texte = f"tick: = {tick}"
         surface = font.render(texte, True, (100, 15, 255))
-        screen.blit(surface, (10, 40))
+        screen.blit(surface, (10, 70))
     def afficher_pv():
         font = pygame.font.SysFont(None, 30)
         texte = f"Pv:{pv}"
@@ -137,36 +141,58 @@ def main():
         
     
     def monstre():
-      global vague
-      if vague==1:
-       
-        if tick % 40 == 0:
-          monstres.append([0, 32])
-      elif vague==2:
-        if tick % 30 == 0:
-          monstres.append([0, 32])
+        global vague
+        nonlocal ennemis_tues
+        if vague==1:
+            if tick % 40 == 0:
+                monstres.append([0, 32])
+                monstres_pv.append(vague*10)
+        elif vague==2:
+            if tick % 30 == 0:
+                monstres.append([0, 32])
+                monstres_pv.append(vague*10)
 
-      elif vague==3:
-        if tick % 20 == 0:
-          monstres.append([0, 32])
+        elif vague==3:
+            if tick % 20 == 0:
+                monstres.append([0, 32])
+                monstres_pv.append(vague*10)
 
-      elif vague==4:
-        if tick % 10 == 0:
-          monstres.append([0, 32])
+        elif vague==4:
+            if tick % 10 == 0:
+                monstres.append([0, 32])
+                monstres_pv.append(vague*10)
 
 
 
 
-      for m in monstres:
-       m[0] += 1
-       for t in placed_towers_range:
-        x_min, x_max, y_min, y_max = t
-        if x_min <= m[0] <= x_max and y_min <= m[1] <= y_max:
-            m[0] -= 1 # Le monstre est ralenti par la tour
- 
-      for m in monstres[:]:
-        if m[0] >= 120:
-         monstres.remove(m)
+        for m in monstres:
+            m[0] += 1
+            monstre_id = monstres.index(m) #on obtient l'identifiant du monstre
+            for t in placed_towers_range:
+                x_min, x_max, y_min, y_max = t
+                if x_min <= m[0] <= x_max and y_min <= m[1] <= y_max:
+                    tower_id = placed_towers_range.index(t) + 1 #on obtient l'identifiant de la tour
+                    tower_name = placed_towers_names.get(tower_id) #On verifie le type de tours que c'est
+                    if tower_name == "tourlectrique":
+                        monstres_pv[monstre_id] -= 1 # Le monstre est ralenti par la tour
+                    elif tower_name == "sapintueur":
+                        monstres_pv[monstre_id] -= 2 # Le monstre est plus ralenti par la tour
+                    elif tower_name == "cristalexplosif":
+                        monstres_pv[monstre_id] -= 3 # Le monstre est encore plus ralenti par la tour
+    
+        for m in monstres[:]:
+            if m[0] >= 120:
+                del monstres_pv[monstres.index(m)] #ligne IA, on supprime les pv du monstre mort
+                monstres.remove(m)
+                return
+            elif monstres_pv[monstres.index(m)] <= 0:
+                try:
+                    del monstres_pv[monstres.index(m)] #ligne IA, on supprime les pv du monstre mort
+                    monstres.remove(m)
+                    ennemis_tues += 1
+                except Exception as e:
+                    ui_tooling.show_error_popup(e)
+               
 
        
         
