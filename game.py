@@ -205,9 +205,13 @@ def main():
         texture= pygame.image.load("Assets/zombie.png").convert_alpha()
         texture = pygame.transform.scale(texture, (50,50)) 
         for m in monstres:
-           x,y=m
-           y=y-1
-           screen.blit(texture, (x*16,y*16))
+            x,y=m
+            y=y-1
+            screen.blit(texture, (x*16,y*16))
+            currentid = monstres.index(m)
+            texte = f"{monstres_pv[currentid]}"
+            surface = font.render(texte, True, (255, 0, 0))
+            screen.blit(surface, (x*16, (y-1)*16))
        
    
     def generearbre():
