@@ -25,6 +25,7 @@ def main():
                                                                                     # C'est aussi dans le meme ordre que les boutons de ladite popup
     placed_towers_names = {1: "tourlectrique"}
     placed_towers_coords = [[15,15]]
+    placed_towers_range = [[15-3,15+3,15-3,15+3]]  #x_min,x_max,y_min,y_max
 
     clock = pygame.time.Clock()
     pygame.mixer.music.load("Assets/musique.mp3")
@@ -158,6 +159,10 @@ def main():
 
       for m in monstres:
        m[0] += 1
+       for t in placed_towers_range:
+        x_min, x_max, y_min, y_max = t
+        if x_min <= m[0] <= x_max and y_min <= m[1] <= y_max:
+            m[0] -= 1 # Le monstre est ralenti par la tour
  
       for m in monstres[:]:
         if m[0] >= 120:
@@ -325,6 +330,7 @@ def main():
                             prix = tower_dict[tour_selectionnee]
                             if argent >= prix:
                                 placed_towers_coords.append([x, y])
+                                placed_towers_range.append([x-3, x+3, y-3, y+3])  # Ajouter la portée de la tour placée
                                 try:
                                     new_id = max(placed_towers_names.keys()) + 1
                                 except ValueError:
