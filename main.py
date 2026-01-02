@@ -28,31 +28,6 @@ class SnakeLauncher(QtWidgets.QMainWindow): #la classe a été en pertie (50% a 
         self.start_button.clicked.connect(self.maingame_load)
         self.exitbtn.clicked.connect(sys.exit)
 
-
-    def update_lives(self, state):
-        """Met à jour la variable lives_enabled selon l'état de la checkbox"""
-        try:
-            features[2] = state == 2  # 2 signifie "coché" en Qt6
-            print(f"DEBUG : Deplacement de fruits: {features[0]}")
-        except Exception as e:
-            self.show_error_popup(e)
-        
-    def update_timer(self, state):
-        """Met à jour la variable timer_enabled selon l'état de la checkbox"""
-        try:
-            features[1] = state == 2  # 2 signifie "coché" en Qt6
-            print(f"DEBUG : Temps limite activé: {features[1]}")
-        except Exception as e:
-            self.show_error_popup(e)
-    
-    def update_degrade(self, state):
-        """Met à jour la variable degrade selon l'état de la checkbox"""
-        try:
-            features[3] = state == 2  # 2 signifie "coché" en Qt6
-            print(f"DEBUG : Degradé activé : {features[1]}")
-        except Exception as e:
-            self.show_error_popup(e)
-
     def show_error_popup(self, e):
         msg = QMessageBox(self)
         msg.setIcon(QMessageBox.Icon.Critical)
