@@ -5,7 +5,7 @@ from time import time
 import ui_tooling #utilitaire custom pour afficher des fenêtres PyQt6 (par exemple pour sélectionner une tour ou mettre en pause le jeu), correspond au fichier ui_tooling.py
 
 
-def main():
+def main(debug_show=False):
     pygame.init()
     pygame.mixer.init()
     vague=1
@@ -342,10 +342,11 @@ def main():
         chateau()
         generearbre()
         afficher_monstre()
-        afficher_debug_monstres()
         draw_arbre()
         afficher_argent()
-        afficher_lesticks()
+        if debug_show:
+            afficher_lesticks()
+            afficher_debug_monstres()
         afficher_perte()
         afficher_pv()
         afficher_portail()
