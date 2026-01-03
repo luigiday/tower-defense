@@ -1,1 +1,0 @@
-# Librairie de gestion des sauvegardes
