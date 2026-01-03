@@ -150,6 +150,7 @@ def main(debug_show=False):
     def monstre():
         global vague
         nonlocal ennemis_tues
+        nonlocal argent
         if vague==1:
             if tick % 40 == 0:
                 monstres.append([0, 32])
