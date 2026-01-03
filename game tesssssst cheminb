@@ -78,7 +78,7 @@ def main():
       x=x1
      chemins.append((x, y1)) 
     
-     while x<=95:
+     while x<=90:
        
        add=randint(5,10)
        if y1<30:

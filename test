@@ -1,8 +1,9 @@
 
-
+import time
 import random
 chemins=[]
 import math
+monstres=[]
 def chemin():
      y1=random.randint(10,60)
      x1=random.randint(5,10)
@@ -47,7 +48,21 @@ def chemin():
             chemins.append((x,y1))
 chemin()
 print(chemins)
+def monstre():
+          
+          x=time()
+    
+       
+          time.sleep(5)
+          
+         
+          y=time()
+          dif=y-x
+          if dif==4:
+             monstres.append([0, 32])
 
+chemin()
+print(monstres)
 
       
        

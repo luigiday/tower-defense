@@ -86,8 +86,9 @@ def main(debug_show=False):
           for m in monstres[:]: 
              x, y = m
              if x>=119:
+              currentid = monstres.index(m)
               
-              pv-=10
+              pv-=monstres_pv[currentid]
               dégats.play()
              if pv<=0:
               pygame.mixer.music.pause()
@@ -192,10 +193,12 @@ def main(debug_show=False):
                 monstres.remove(m)
                 return
             elif monstres_pv[monstres.index(m)] <= 0:
+                argent+=100
                 try:
                     del monstres_pv[monstres.index(m)] #ligne IA, on supprime les pv du monstre mort
                     monstres.remove(m)
                     ennemis_tues += 1
+                    
                 except Exception as e:
                     ui_tooling.show_error_popup(e)
                
@@ -215,10 +218,61 @@ def main(debug_show=False):
             y=y-1
             screen.blit(texture, (x*16,y*16))
             currentid = monstres.index(m)
-            texte = f"{monstres_pv[currentid]}"
-            surface = font.render(texte, True, (255, 0, 0))
-            screen.blit(surface, (x*16, (y-1)*16))
-       
+            pv_monstre = monstres_pv[currentid]
+
+            
+            texture10 = pygame.image.load("Assets/full.png").convert_alpha()  
+            texture10 = pygame.transform.scale(texture10, (50,50))
+
+            texture9 = pygame.image.load("Assets/9.png").convert_alpha()
+            texture9 = pygame.transform.scale(texture9, (50,50))
+
+            texture8 = pygame.image.load("Assets/8.png").convert_alpha()
+            texture8 = pygame.transform.scale(texture8, (50,50))
+
+            texture7 = pygame.image.load("Assets/7.png").convert_alpha()
+            texture7 = pygame.transform.scale(texture7, (50,50))
+
+            texture6 = pygame.image.load("Assets/6.png").convert_alpha()
+            texture6 = pygame.transform.scale(texture6, (50,50))
+
+            texture5 = pygame.image.load("Assets/5.png").convert_alpha()
+            texture5 = pygame.transform.scale(texture5, (50,50))
+
+            texture4 = pygame.image.load("Assets/4.png").convert_alpha()
+            texture4 = pygame.transform.scale(texture4, (50,50))
+
+            texture3 = pygame.image.load("Assets/3.png").convert_alpha()
+            texture3 = pygame.transform.scale(texture3, (50,50))
+
+            texture2 = pygame.image.load("Assets/2.png").convert_alpha()
+            texture2 = pygame.transform.scale(texture2, (50,50))
+
+            texture1 = pygame.image.load("Assets/1..png").convert_alpha()
+            texture1 = pygame.transform.scale(texture1, (50,50))
+
+            
+            if pv_monstre >= 10:
+                screen.blit(texture10, (((x)*16-3), ((y-1)*16-6)))  
+            elif pv_monstre == 9:
+                screen.blit(texture9, (((x)*16-3), ((y-1)*16-6))) 
+            elif pv_monstre == 8:
+                screen.blit(texture8, (((x)*16-3), ((y-1)*16-6))) 
+            elif pv_monstre == 7:
+                screen.blit(texture7,(((x)*16-3), ((y-1)*16-6))) 
+            elif pv_monstre == 6:
+                screen.blit(texture6, (((x)*16-3), ((y-1)*16-6))) 
+            elif pv_monstre == 5:
+                screen.blit(texture5, (((x)*16-3), ((y-1)*16-6))) 
+            elif pv_monstre == 4:
+                screen.blit(texture4, (((x)*16-3), ((y-1)*16-6))) 
+            elif pv_monstre == 3:
+                screen.blit(texture3, (((x)*16-3), ((y-1)*16-6))) 
+            elif pv_monstre == 2:
+                screen.blit(texture2, (((x)*16-3), ((y-1)*16-6))) 
+            elif pv_monstre == 1:
+                screen.blit(texture1, (((x)*16-3), ((y-1)*16-6))) 
+
    
     def generearbre():
      
