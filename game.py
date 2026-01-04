@@ -9,6 +9,7 @@ def main(debug_show=False):
     pygame.init()
     pygame.mixer.init()
     vague=1
+    chemins=[]
     path=[]
     monstres=[]
     monstres_pv=[]
@@ -55,44 +56,79 @@ def main(debug_show=False):
 
     def draw_chemin(x, y):
         image = None
+        
         try:
+            font = pygame.font.SysFont(None, 240)
             image = pygame.image.load("Assets/soldepierre.png").convert_alpha()
         except Exception as e:
             ui_tooling.show_error_popup(e)
             image = None
 
         if image:
-            screen.blit(image, (x * 16, y * 16))
+        
+            image = pygame.image.load("Assets/soldepierre.png").convert_alpha()
+            image = pygame.transform.scale(image, (32,32))  # taille en pixels du chemin
+            screen.blit(image, (x*16, y*16))
         else:
             pygame.draw.rect(screen, (255, 0, 255), [x * 16, y * 16, 16, 16])
 
 
 
+
     def initi():
+     y1=randint(10,60)
+     x1=randint(10,20)
+     chemins.append((0, y1)) 
+     
+     for s in range(1,x1):
+      chemins.append((s,y1))
+      x=x1
+     chemins.append((x, y1)) 
+    
+     while x<=95:
+       
+       add=randint(5,10)
+       if y1<30:
+        
+        for m in range(add):
+         y1+=1
+         chemins.append((x,y1))
+       else:
+        
+        for m in range(add):
+         y1-=1
+         chemins.append((x,y1))
+       for n in range(randint(10,20)):
+            x += 1
+            chemins.append((x, y1))
+     xfin=120-x
+     if y1<32:
+      yfin=32-y1
+      for k in range(yfin):
+       y1+=1
+       chemins.append((x,y1))
 
+     else:
+      yfin=abs(32-y1)
+      for k in range(yfin):
+        y1-=1
+        chemins.append((x,y1))
+     for n in range(xfin):
+            x += 1
+            chemins.append((x,y1))
 
-        for i in range(120):  
-          a = (i, 31)
-          b = (i, 32)
-          c = (i, 33)
-          path.append(a)
-          path.append(b)
-          path.append(c)
-          draw_chemin(*a)
-          draw_chemin(*b)
-          draw_chemin(*c)
     def chateau():
-          nonlocal pv
-          for m in monstres[:]: 
-             x, y = m
-             if x>=119:
-              currentid = monstres.index(m)
-              
-              pv-=monstres_pv[currentid]
-              dégats.play()
-             if pv<=0:
-              pygame.mixer.music.pause()
-              loose.play()
+        nonlocal pv
+        for m in monstres[:]:
+            if m["i"] >= len(chemins) - 2:
+                pv -= 10
+                dégats.play()
+                monstres.remove(m)
+
+                if pv <= 0:
+                    pygame.mixer.music.pause()
+                    loose.play()
+                 
                  
                  
 
@@ -150,68 +186,71 @@ def main(debug_show=False):
     def monstre():
         global vague
         nonlocal ennemis_tues
-        nonlocal argent
         if vague==1:
             if tick % 40 == 0:
-                monstres.append([0, 32])
-                monstres_pv.append(vague*10)
+                             
+                monstres.append({"i": 0 })
+                monstres_pv.append(10) 
         elif vague==2:
             if tick % 30 == 0:
-                monstres.append([0, 32])
-                monstres_pv.append(vague*10)
+                
+                monstres.append({"i": 0 })
+                monstres_pv.append(10) 
 
         elif vague==3:
             if tick % 20 == 0:
-                monstres.append([0, 32])
-                monstres_pv.append(vague*10)
+                
+                monstres.append({"i": 0 })
+                monstres_pv.append(10) 
 
         elif vague==4:
             if tick % 10 == 0:
-                monstres.append([0, 32])
-                monstres_pv.append(vague*10)
-
-
-
+                
+                monstres.append({"i": 0 })
+                monstres_pv.append(10) 
 
         for m in monstres:
-            m[0] += 1
-            monstre_id = monstres.index(m) #on obtient l'identifiant du monstre
-            for t in placed_towers_range:
-                x_min, x_max, y_min, y_max = t
-                if x_min <= m[0] <= x_max and y_min <= m[1] <= y_max:
-                    tower_id = placed_towers_range.index(t) + 1 #on obtient l'identifiant de la tour
-                    tower_name = placed_towers_names.get(tower_id) #On verifie le type de tours que c'est
-                    if tower_name == "tourlectrique":
-                        monstres_pv[monstre_id] -= 1 # Le monstre est ralenti par la tour
-                    elif tower_name == "sapintueur":
-                        monstres_pv[monstre_id] -= 2 # Le monstre est plus ralenti par la tour
-                    elif tower_name == "cristalexplosif":
-                        monstres_pv[monstre_id] -= 3 # Le monstre est encore plus ralenti par la tour
-    
+            m["i"] += 1
+            # EDITED: Get monster coordinates from path for tower range checking (modifié par IA)
+            if m["i"] < len(chemins):
+                x, y = chemins[m["i"]]
+                # EDITED: Check towers and apply damage (modifié par IA)
+                for t in placed_towers_range:
+                    x_min, x_max, y_min, y_max = t
+                    if x_min <= x <= x_max and y_min <= y <= y_max: # Fin de la partie modifié par IA
+                        monster_id = monstres.index(m)
+                        tower_id = placed_towers_range.index(t)
+                        tower_name = placed_towers_names.get(tower_id + 1)
+                        if tower_name == "tourlectrique":
+                            monstres_pv[monster_id] -= 1
+                        elif tower_name == "sapintueur":
+                            monstres_pv[monster_id] -= 2
+                        elif tower_name == "cristalexplosif":
+                            monstres_pv[monster_id] -= 3
+        
         for m in monstres[:]:
-            if m[0] >= 120:
-                del monstres_pv[monstres.index(m)] #ligne IA, on supprime les pv du monstre mort
+            if m["i"] >= len(chemins) - 1:
+                monster_id = monstres.index(m)
+                del monstres_pv[monster_id]
                 monstres.remove(m)
-                return
             elif monstres_pv[monstres.index(m)] <= 0:
-                argent+=100
                 try:
-                    del monstres_pv[monstres.index(m)] #ligne IA, on supprime les pv du monstre mort
+                    monster_id = monstres.index(m)
+                    del monstres_pv[monster_id]
                     monstres.remove(m)
                     ennemis_tues += 1
-                    
                 except Exception as e:
                     ui_tooling.show_error_popup(e)
-               
 
        
         
       
     def afficher_portail():
+        x,y=chemins[0]
         texture= pygame.image.load("Assets/portail.png").convert_alpha()
-        screen.blit(texture, (0,450))
+        screen.blit(texture, (x*16,(y*16-60)))
 
-    def afficher_monstre():
+    def afficher_monstre_legacy():
         texture= pygame.image.load("Assets/zombie.png").convert_alpha()
         texture = pygame.transform.scale(texture, (50,50)) 
         for m in monstres:
@@ -220,6 +259,74 @@ def main(debug_show=False):
             screen.blit(texture, (x*16,y*16))
             currentid = monstres.index(m)
             pv_monstre = monstres_pv[currentid]
+
+            
+            texture10 = pygame.image.load("Assets/full.png").convert_alpha()  
+            texture10 = pygame.transform.scale(texture10, (50,50))
+
+            texture9 = pygame.image.load("Assets/9.png").convert_alpha()
+            texture9 = pygame.transform.scale(texture9, (50,50))
+
+            texture8 = pygame.image.load("Assets/8.png").convert_alpha()
+            texture8 = pygame.transform.scale(texture8, (50,50))
+
+            texture7 = pygame.image.load("Assets/7.png").convert_alpha()
+            texture7 = pygame.transform.scale(texture7, (50,50))
+
+            texture6 = pygame.image.load("Assets/6.png").convert_alpha()
+            texture6 = pygame.transform.scale(texture6, (50,50))
+
+            texture5 = pygame.image.load("Assets/5.png").convert_alpha()
+            texture5 = pygame.transform.scale(texture5, (50,50))
+
+            texture4 = pygame.image.load("Assets/4.png").convert_alpha()
+            texture4 = pygame.transform.scale(texture4, (50,50))
+
+            texture3 = pygame.image.load("Assets/3.png").convert_alpha()
+            texture3 = pygame.transform.scale(texture3, (50,50))
+
+            texture2 = pygame.image.load("Assets/2.png").convert_alpha()
+            texture2 = pygame.transform.scale(texture2, (50,50))
+
+            texture1 = pygame.image.load("Assets/1..png").convert_alpha()
+            texture1 = pygame.transform.scale(texture1, (50,50))
+
+            
+            if pv_monstre >= 10:
+                screen.blit(texture10, (((x)*16-3), ((y-1)*16-6)))  
+            elif pv_monstre == 9:
+                screen.blit(texture9, (((x)*16-3), ((y-1)*16-6))) 
+            elif pv_monstre == 8:
+                screen.blit(texture8, (((x)*16-3), ((y-1)*16-6))) 
+            elif pv_monstre == 7:
+                screen.blit(texture7,(((x)*16-3), ((y-1)*16-6))) 
+            elif pv_monstre == 6:
+                screen.blit(texture6, (((x)*16-3), ((y-1)*16-6))) 
+            elif pv_monstre == 5:
+                screen.blit(texture5, (((x)*16-3), ((y-1)*16-6))) 
+            elif pv_monstre == 4:
+                screen.blit(texture4, (((x)*16-3), ((y-1)*16-6))) 
+            elif pv_monstre == 3:
+                screen.blit(texture3, (((x)*16-3), ((y-1)*16-6))) 
+            elif pv_monstre == 2:
+                screen.blit(texture2, (((x)*16-3), ((y-1)*16-6))) 
+            elif pv_monstre == 1:
+                screen.blit(texture1, (((x)*16-3), ((y-1)*16-6))) 
+
+    def afficher_monstre():
+        texture = pygame.image.load("Assets/zombie.png").convert_alpha()
+        texture = pygame.transform.scale(texture, (50,50))
+
+        for m in monstres:
+            i = m["i"]
+            if i < len(chemins):
+                x, y = chemins[i]
+                screen.blit(texture, (x*16, (y-1)*16))
+                texte = f"{monstres_pv}"
+                surface = font.render(texte, True, (255, 0, 255))
+                screen.blit(surface, (10, 10))
+                currentid = monstres.index(m)
+                pv_monstre = monstres_pv[currentid]
 
             
             texture10 = pygame.image.load("Assets/full.png").convert_alpha()  
@@ -390,7 +497,9 @@ def main(debug_show=False):
     running = True
     while running:
         draw_fleurs()
-        initi()
+        
+        for x, y in chemins:
+            draw_chemin(x, y)
      
         vagues()
         monstre()
