@@ -123,10 +123,10 @@ def main(debug_show=False):
         for m in monstres[:]:
             if m["i"] >= len(chemins) - 2:
                 monstre_pv = monstres_pv[monstres.index(m)]
-                pv -= monstre_pv
-                monstres_pv.remove(2*monstre_pv)
+                pv -= 2*monstre_pv
+                #monstres_pv.remove(2*monstre_pv)
                 dégats.play()
-                monstres.remove(m)
+                #monstres.remove(m)
 
                 if pv <= 0:
                     pygame.mixer.music.pause()
@@ -158,6 +158,7 @@ def main(debug_show=False):
         surface = font.render(texte, True, (255, 0, 0))
         if pv<=0:
             screen.blit(surface, (700, 435))
+            pygame.display.flip()
             if ui_tooling.gameover(placed_towers_names, depenses, ennemis_tues, time() - debut, vague):
                 running = False
                 pygame.quit()
@@ -265,47 +266,7 @@ def main(debug_show=False):
         texture= pygame.image.load("Assets/portail.png").convert_alpha()
         screen.blit(texture, (x*16,(y*16-60)))
 
-    def afficher_monstre_legacy():
-        texture= pygame.image.load("Assets/zombie.png").convert_alpha()
-        texture = pygame.transform.scale(texture, (50,50)) 
-        for m in monstres:
-            x,y=m
-            y=y-1
-            screen.blit(texture, (x*16,y*16))
-            currentid = monstres.index(m)
-            pv_monstre = monstres_pv[currentid]
-            pv_max_monstre = monstres_pv_max[currentid]
-
-            
-            texture10 = pygame.image.load("Assets/full.png").convert_alpha()  
-            texture10 = pygame.transform.scale(texture10, (50,50))
-
-            texture9 = pygame.image.load("Assets/9.png").convert_alpha()
-            texture9 = pygame.transform.scale(texture9, (50,50))
-
-            texture8 = pygame.image.load("Assets/8.png").convert_alpha()
-            texture8 = pygame.transform.scale(texture8, (50,50))
-
-            texture7 = pygame.image.load("Assets/7.png").convert_alpha()
-            texture7 = pygame.transform.scale(texture7, (50,50))
-
-            texture6 = pygame.image.load("Assets/6.png").convert_alpha()
-            texture6 = pygame.transform.scale(texture6, (50,50))
-
-            texture5 = pygame.image.load("Assets/5.png").convert_alpha()
-            texture5 = pygame.transform.scale(texture5, (50,50))
-
-            texture4 = pygame.image.load("Assets/4.png").convert_alpha()
-            texture4 = pygame.transform.scale(texture4, (50,50))
-
-            texture3 = pygame.image.load("Assets/3.png").convert_alpha()
-            texture3 = pygame.transform.scale(texture3, (50,50))
-
-            texture2 = pygame.image.load("Assets/2.png").convert_alpha()
-            texture2 = pygame.transform.scale(texture2, (50,50))
-
-            texture1 = pygame.image.load("Assets/1..png").convert_alpha()
-            texture1 = pygame.transform.scale(texture1, (50,50))
+    
 
             
     def afficher_monstre():
