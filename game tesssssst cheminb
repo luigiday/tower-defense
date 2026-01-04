@@ -5,15 +5,16 @@ from time import time
 import ui_tooling #utilitaire custom pour afficher des fenêtres PyQt6 (par exemple pour sélectionner une tour ou mettre en pause le jeu), correspond au fichier ui_tooling.py
 
 
-def main():
+def main(debug_show=False):
     pygame.init()
     pygame.mixer.init()
     vague=1
-    path=[]
+    
+    chemins=[]
     monstres=[]
+    monstres_pv=[]
     tick=0
     pv=100
-    chemins=[]
     arbres=[]
     # Variables de stats
     debut = time()
@@ -26,6 +27,7 @@ def main():
                                                                                     # C'est aussi dans le meme ordre que les boutons de ladite popup
     placed_towers_names = {1: "tourlectrique"}
     placed_towers_coords = [[15,15]]
+    placed_towers_range = [[15-3,15+3,15-3,15+3]]  #x_min,x_max,y_min,y_max
 
     clock = pygame.time.Clock()
     pygame.mixer.music.load("Assets/musique.mp3")
@@ -54,19 +56,22 @@ def main():
 
     def draw_chemin(x, y):
         image = None
+        
         try:
+            font = pygame.font.SysFont(None, 240)
             image = pygame.image.load("Assets/soldepierre.png").convert_alpha()
         except Exception as e:
             ui_tooling.show_error_popup(e)
             image = None
 
         if image:
-            image = pygame.transform.scale(image, (30,30)) 
-            screen.blit(image, (x * 16, y * 16))
+        
+            image = pygame.image.load("Assets/soldepierre.png").convert_alpha()
+            image = pygame.transform.scale(image, (32,32))  # taille en pixels du chemin
+            screen.blit(image, (x*16, y*16))
         else:
             pygame.draw.rect(screen, (255, 0, 255), [x * 16, y * 16, 16, 16])
 
- 
 
     def initi():
      y1=randint(10,60)
@@ -78,7 +83,7 @@ def main():
       x=x1
      chemins.append((x, y1)) 
     
-     while x<=90:
+     while x<=95:
        
        add=randint(5,10)
        if y1<30:
@@ -110,32 +115,33 @@ def main():
             x += 1
             chemins.append((x,y1))
 
-    
-    def chateau():
-          nonlocal pv
-          for m in monstres[:]: 
-             x, y = m
-             if x>=119:
-              
-              pv-=10
-              dégats.play()
-             if pv<=0:
-              pygame.mixer.music.pause()
-              loose.play()
 
+    def chateau():
+        nonlocal pv
+        for m in monstres[:]:
+            if m["i"] >= len(chemins) - 2:
+                pv -= 10
+                dégats.play()
+                monstres.remove(m)
+
+                if pv <= 0:
+                    pygame.mixer.music.pause()
+                    loose.play()
                  
-    def afficher_debug_chemin():
-        texte = f"chemins = {chemins[0]}"
-        surface = font.render(texte, True, (255, 0, 255))
-        screen.blit(surface, (300, 10))
+                 
+                 
+
     def afficher_debug_monstres():
         texte = f"monstres = {monstres}"
         surface = font.render(texte, True, (255, 0, 255))
         screen.blit(surface, (10, 10))
+        texte = f"monstres pv = {monstres_pv}"
+        surface = font.render(texte, True, (255, 0, 255))
+        screen.blit(surface, (10, 40))
     def afficher_lesticks():
         texte = f"tick: = {tick}"
         surface = font.render(texte, True, (100, 15, 255))
-        screen.blit(surface, (10, 40))
+        screen.blit(surface, (10, 70))
     def afficher_pv():
         font = pygame.font.SysFont(None, 30)
         texte = f"Pv:{pv}"
@@ -148,11 +154,15 @@ def main():
         surface = font.render(texte, True, (255, 0, 0))
         if pv<=0:
             screen.blit(surface, (700, 435))
-            ui_tooling.gameover(placed_towers_names, depenses, ennemis_tues, time() - debut, vague)
+            if ui_tooling.gameover(placed_towers_names, depenses, ennemis_tues, time() - debut, vague):
+                running = False
+                pygame.quit()
+                main()
+            else:
+                running = False
+                pygame.quit()
   
-    def afficher_chemin():
-     for x, y in chemins:
-        draw_chemin(x, y)
+
     def vagues():
       global vague
       if tick <= 300:
@@ -173,52 +183,143 @@ def main():
         
     
     def monstre():
-      global vague
-      if vague==1:
-       
-        if tick % 40 == 0:
-          monstres.append([0, 32])
-      elif vague==2:
-        if tick % 30 == 0:
-          monstres.append([0, 32])
+        global vague
+        nonlocal ennemis_tues
+        if vague==1:
+            if tick % 40 == 0:
+                             
+                monstres.append({"i": 0 })
+                monstres_pv.append(10) 
+        elif vague==2:
+            if tick % 30 == 0:
+                
+                monstres.append({"i": 0 })
+                monstres_pv.append(10) 
 
-      elif vague==3:
-        if tick % 20 == 0:
-          monstres.append([0, 32])
+        elif vague==3:
+            if tick % 20 == 0:
+                
+                monstres.append({"i": 0 })
+                monstres_pv.append(10) 
 
-      elif vague==4:
-        if tick % 10 == 0:
-          monstres.append([0, 32])
+        elif vague==4:
+            if tick % 10 == 0:
+                
+                monstres.append({"i": 0 })
+                monstres_pv.append(10) 
 
 
 
 
-      for m in monstres:
-       m[0] += 1
- 
-      for m in monstres[:]:
-        if m[0] >= 120:
-         monstres.remove(m)
+        for m in monstres:
+   
+            m["i"] += 1
+            if m["i"] >= len(chemins):
+                monstre_id = monstres.index(m) #on obtient l'identifiant du monstre
+                for t in placed_towers_range:
+                    x_min, x_max, y_min, y_max = t
+                    x, y = chemins[m["i"]]
+                    if x_min <= x <= x_max and y_min <= y <= y_max:
+                        tower_id = placed_towers_range.index(t) + 1 #on obtient l'identifiant de la tour
+                        tower_name = placed_towers_names.get(tower_id) #On verifie le type de tours que c'est
+                        if tower_name == "tourlectrique":
+                            monstres_pv[monstre_id] -= 1 # Le monstre est ralenti par la tour
+                        elif tower_name == "sapintueur":
+                            monstres_pv[monstre_id] -= 2 # Le monstre est plus ralenti par la tour
+                        elif tower_name == "cristalexplosif":
+                            monstres_pv[monstre_id] -= 3 # Le monstre est encore plus ralenti par la tour
+        
+            for m in monstres[:]:
+                if m["i"] >= len(chemins) - 1:
+                    del monstres_pv[monstres.index(m)] #ligne IA, on supprime les pv du monstre mort
+                    monstres.remove(m)
+                    return
+                elif monstres_pv[monstres.index(m)] <= 0:
+                    try:
+                        del monstres_pv[monstres.index(m)] #ligne IA, on supprime les pv du monstre mort
+                        monstres.remove(m)
+                        ennemis_tues += 1
+                        
+                    except Exception as e:
+                        ui_tooling.show_error_popup(e)
+                
 
        
         
       
     def afficher_portail():
         x,y=chemins[0]
-        
-        y=y-4
         texture= pygame.image.load("Assets/portail.png").convert_alpha()
-        screen.blit(texture, (x*16,y*16))
-
+        screen.blit(texture, (x*16,(y*16-60)))
     def afficher_monstre():
-        texture= pygame.image.load("Assets/zombie.png").convert_alpha()
-        texture = pygame.transform.scale(texture, (50,50)) 
+        texture = pygame.image.load("Assets/zombie.png").convert_alpha()
+        texture = pygame.transform.scale(texture, (50,50))
+
         for m in monstres:
-           x,y=m
-           y=y-1
-           screen.blit(texture, (x*16,y*16))
-       
-   
+            i = m["i"]
+            if i < len(chemins):
+                x, y = chemins[i]
+                screen.blit(texture, (x*16, (y-1)*16))
+                texte = f"{monstres_pv}"
+                surface = font.render(texte, True, (255, 0, 255))
+                screen.blit(surface, (10, 10))
+
+            
+            texture10 = pygame.image.load("Assets/full.png").convert_alpha()  
+            texture10 = pygame.transform.scale(texture10, (50,50))
+
+            texture9 = pygame.image.load("Assets/9.png").convert_alpha()
+            texture9 = pygame.transform.scale(texture9, (50,50))
+
+            texture8 = pygame.image.load("Assets/8.png").convert_alpha()
+            texture8 = pygame.transform.scale(texture8, (50,50))
+
+            texture7 = pygame.image.load("Assets/7.png").convert_alpha()
+            texture7 = pygame.transform.scale(texture7, (50,50))
+
+            texture6 = pygame.image.load("Assets/6.png").convert_alpha()
+            texture6 = pygame.transform.scale(texture6, (50,50))
+
+            texture5 = pygame.image.load("Assets/5.png").convert_alpha()
+            texture5 = pygame.transform.scale(texture5, (50,50))
+
+            texture4 = pygame.image.load("Assets/4.png").convert_alpha()
+            texture4 = pygame.transform.scale(texture4, (50,50))
+
+            texture3 = pygame.image.load("Assets/3.png").convert_alpha()
+            texture3 = pygame.transform.scale(texture3, (50,50))
+
+            texture2 = pygame.image.load("Assets/2.png").convert_alpha()
+            texture2 = pygame.transform.scale(texture2, (50,50))
+
+            texture1 = pygame.image.load("Assets/1..png").convert_alpha()
+            texture1 = pygame.transform.scale(texture1, (50,50))
+
+            
+            if monstres_pv==10 :
+                screen.blit(texture10, (((x)*16-3), ((y-1)*16-6)))  
+            elif monstres_pv==9:
+                screen.blit(texture9, (((x)*16-3), ((y-1)*16-6))) 
+            elif monstres_pv==8:
+                screen.blit(texture8, (((x)*16-3), ((y-1)*16-6))) 
+            elif monstres_pv==7:
+                screen.blit(texture7,(((x)*16-3), ((y-1)*16-6))) 
+            elif monstres_pv==6:
+                screen.blit(texture6, (((x)*16-3), ((y-1)*16-6))) 
+            elif monstres_pv==5:
+                screen.blit(texture5, (((x)*16-3), ((y-1)*16-6))) 
+            elif monstres_pv==4:
+                screen.blit(texture4, (((x)*16-3), ((y-1)*16-6))) 
+            elif monstres_pv==3:
+                screen.blit(texture3, (((x)*16-3), ((y-1)*16-6))) 
+            elif monstres_pv==2:
+                screen.blit(texture2, (((x)*16-3), ((y-1)*16-6))) 
+            elif monstres_pv==1:
+                screen.blit(texture1, (((x)*16-3), ((y-1)*16-6))) 
+
+    def afficher_chemin():
+     for x, y in chemins:
+        draw_chemin(x, y)
     def generearbre():
      
         texture = pygame.image.load("Assets/arbre.png").convert_alpha()
@@ -334,18 +435,23 @@ def main():
     running = True
     while running:
         draw_fleurs()
-
+        
         afficher_chemin()
+        
+        
+     
+        
+        
         vagues()
         monstre()
         chateau()
-        afficher_debug_chemin()
         generearbre()
         afficher_monstre()
-        afficher_debug_monstres()
         draw_arbre()
         afficher_argent()
-        afficher_lesticks()
+        if debug_show:
+            afficher_lesticks()
+            afficher_debug_monstres()
         afficher_perte()
         afficher_pv()
         afficher_portail()
@@ -366,6 +472,7 @@ def main():
                             prix = tower_dict[tour_selectionnee]
                             if argent >= prix:
                                 placed_towers_coords.append([x, y])
+                                placed_towers_range.append([x-3, x+3, y-3, y+3])  # Ajouter la portée de la tour placée
                                 try:
                                     new_id = max(placed_towers_names.keys()) + 1
                                 except ValueError:
@@ -394,7 +501,7 @@ def main():
 
 
         clock.tick(
-           8
+           160
         )
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE] :
