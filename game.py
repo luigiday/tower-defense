@@ -13,6 +13,7 @@ def main(debug_show=False):
     path=[]
     monstres=[]
     monstres_pv=[]
+    monstres_pv_max = []
     tick=0
     pv=100
     arbres=[]
@@ -22,8 +23,8 @@ def main(debug_show=False):
     ennemis_tues = 0
 
     
-    argent = 1350 #a modifier
-    tower_dict = { "tourlectrique": 200, "sapintueur": 300, "cristalexplosif": 500} # Ne pas modifier les noms, ca casse la selection de tours (les noms sont les mêmes que ceux dans le dossier assets)
+    argent = 250 #a modifier
+    tower_dict = { "tourlectrique": 250, "sapintueur": 500, "cristalexplosif": 1000} # Ne pas modifier les noms, ca casse la selection de tours (les noms sont les mêmes que ceux dans le dossier assets)
                                                                                     # C'est aussi dans le meme ordre que les boutons de ladite popup
     placed_towers_names = {1: "tourlectrique"}
     placed_towers_coords = [[15,15]]
@@ -121,7 +122,9 @@ def main(debug_show=False):
         nonlocal pv
         for m in monstres[:]:
             if m["i"] >= len(chemins) - 2:
-                pv -= 10
+                monstre_pv = monstres_pv[monstres.index(m)]
+                pv -= monstre_pv
+                monstres_pv.remove(2*monstre_pv)
                 dégats.play()
                 monstres.remove(m)
 
@@ -136,7 +139,7 @@ def main(debug_show=False):
         texte = f"monstres = {monstres}"
         surface = font.render(texte, True, (255, 0, 255))
         screen.blit(surface, (10, 10))
-        texte = f"monstres pv = {monstres_pv}"
+        texte = f"monstres pv = {monstres_pv} && montre_pv_max = {monstres_pv_max}"
         surface = font.render(texte, True, (255, 0, 255))
         screen.blit(surface, (10, 40))
     def afficher_lesticks():
@@ -186,28 +189,37 @@ def main(debug_show=False):
     def monstre():
         global vague
         nonlocal ennemis_tues
+        nonlocal argent
         if vague==1:
             if tick % 40 == 0:
                              
                 monstres.append({"i": 0 })
-                monstres_pv.append(10) 
+                pv_monstre_init = randint(5,vague*10)
+                monstres_pv.append(pv_monstre_init)
+                monstres_pv_max.append(pv_monstre_init) 
         elif vague==2:
             if tick % 30 == 0:
                 
                 monstres.append({"i": 0 })
-                monstres_pv.append(10) 
+                pv_monstre_init = randint(5,vague*10)
+                monstres_pv.append(pv_monstre_init)
+                monstres_pv_max.append(pv_monstre_init)
 
         elif vague==3:
             if tick % 20 == 0:
                 
                 monstres.append({"i": 0 })
-                monstres_pv.append(10) 
+                pv_monstre_init = randint(5,vague*10)
+                monstres_pv.append(pv_monstre_init)
+                monstres_pv_max.append(pv_monstre_init)
 
         elif vague==4:
             if tick % 10 == 0:
                 
                 monstres.append({"i": 0 })
-                monstres_pv.append(10) 
+                pv_monstre_init = randint(5,vague*10)
+                monstres_pv.append(pv_monstre_init)
+                monstres_pv_max.append(pv_monstre_init)
 
         for m in monstres:
             m["i"] += 1
@@ -232,13 +244,16 @@ def main(debug_show=False):
             if m["i"] >= len(chemins) - 1:
                 monster_id = monstres.index(m)
                 del monstres_pv[monster_id]
+                del monstres_pv_max[monster_id]
                 monstres.remove(m)
             elif monstres_pv[monstres.index(m)] <= 0:
                 try:
                     monster_id = monstres.index(m)
                     del monstres_pv[monster_id]
+                    del monstres_pv_max[monster_id]
                     monstres.remove(m)
                     ennemis_tues += 1
+                    argent += 100
                 except Exception as e:
                     ui_tooling.show_error_popup(e)
 
@@ -259,6 +274,7 @@ def main(debug_show=False):
             screen.blit(texture, (x*16,y*16))
             currentid = monstres.index(m)
             pv_monstre = monstres_pv[currentid]
+            pv_max_monstre = monstres_pv_max[currentid]
 
             
             texture10 = pygame.image.load("Assets/full.png").convert_alpha()  
@@ -292,27 +308,6 @@ def main(debug_show=False):
             texture1 = pygame.transform.scale(texture1, (50,50))
 
             
-            if pv_monstre >= 10:
-                screen.blit(texture10, (((x)*16-3), ((y-1)*16-6)))  
-            elif pv_monstre == 9:
-                screen.blit(texture9, (((x)*16-3), ((y-1)*16-6))) 
-            elif pv_monstre == 8:
-                screen.blit(texture8, (((x)*16-3), ((y-1)*16-6))) 
-            elif pv_monstre == 7:
-                screen.blit(texture7,(((x)*16-3), ((y-1)*16-6))) 
-            elif pv_monstre == 6:
-                screen.blit(texture6, (((x)*16-3), ((y-1)*16-6))) 
-            elif pv_monstre == 5:
-                screen.blit(texture5, (((x)*16-3), ((y-1)*16-6))) 
-            elif pv_monstre == 4:
-                screen.blit(texture4, (((x)*16-3), ((y-1)*16-6))) 
-            elif pv_monstre == 3:
-                screen.blit(texture3, (((x)*16-3), ((y-1)*16-6))) 
-            elif pv_monstre == 2:
-                screen.blit(texture2, (((x)*16-3), ((y-1)*16-6))) 
-            elif pv_monstre == 1:
-                screen.blit(texture1, (((x)*16-3), ((y-1)*16-6))) 
-
     def afficher_monstre():
         texture = pygame.image.load("Assets/zombie.png").convert_alpha()
         texture = pygame.transform.scale(texture, (50,50))
@@ -322,12 +317,10 @@ def main(debug_show=False):
             if i < len(chemins):
                 x, y = chemins[i]
                 screen.blit(texture, (x*16, (y-1)*16))
-                texte = f"{monstres_pv}"
-                surface = font.render(texte, True, (255, 0, 255))
-                screen.blit(surface, (10, 10))
                 # Fin de la partie modifié par IA
                 currentid = monstres.index(m)
                 pv_monstre = monstres_pv[currentid]
+                pv_max_monstre = monstres_pv_max[currentid]
 
             
             texture10 = pygame.image.load("Assets/full.png").convert_alpha()  
@@ -361,26 +354,27 @@ def main(debug_show=False):
             texture1 = pygame.transform.scale(texture1, (50,50))
 
             
-            if pv_monstre >= 10:
+            if (pv_monstre/pv_max_monstre)*10 >= 10:
                 screen.blit(texture10, (((x)*16-3), ((y-1)*16-6)))  
-            elif pv_monstre == 9:
+            elif (pv_monstre/pv_max_monstre)*10 >= 9:
                 screen.blit(texture9, (((x)*16-3), ((y-1)*16-6))) 
-            elif pv_monstre == 8:
+            elif (pv_monstre/pv_max_monstre)*10 >= 8:
                 screen.blit(texture8, (((x)*16-3), ((y-1)*16-6))) 
-            elif pv_monstre == 7:
+            elif (pv_monstre/pv_max_monstre)*10 >= 7:
                 screen.blit(texture7,(((x)*16-3), ((y-1)*16-6))) 
-            elif pv_monstre == 6:
+            elif (pv_monstre/pv_max_monstre)*10 >= 6:
                 screen.blit(texture6, (((x)*16-3), ((y-1)*16-6))) 
-            elif pv_monstre == 5:
+            elif (pv_monstre/pv_max_monstre)*10 >= 5:
                 screen.blit(texture5, (((x)*16-3), ((y-1)*16-6))) 
-            elif pv_monstre == 4:
+            elif (pv_monstre/pv_max_monstre)*10 >= 4:
                 screen.blit(texture4, (((x)*16-3), ((y-1)*16-6))) 
-            elif pv_monstre == 3:
+            elif (pv_monstre/pv_max_monstre)*10 >= 3:
                 screen.blit(texture3, (((x)*16-3), ((y-1)*16-6))) 
-            elif pv_monstre == 2:
+            elif (pv_monstre/pv_max_monstre)*10 >= 2:
                 screen.blit(texture2, (((x)*16-3), ((y-1)*16-6))) 
-            elif pv_monstre == 1:
+            elif (pv_monstre/pv_max_monstre)*10 >= 1 or (pv_monstre/pv_max_monstre)*10 <= 1:
                 screen.blit(texture1, (((x)*16-3), ((y-1)*16-6))) 
+
 
    
     def generearbre():
