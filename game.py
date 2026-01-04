@@ -22,7 +22,7 @@ def main(debug_show=False):
     ennemis_tues = 0
 
     
-    argent = 1350 #a modifier
+    argent = 250 
     tower_dict = { "tourlectrique": 200, "sapintueur": 300, "cristalexplosif": 500} # Ne pas modifier les noms, ca casse la selection de tours (les noms sont les mêmes que ceux dans le dossier assets)
                                                                                     # C'est aussi dans le meme ordre que les boutons de ladite popup
     placed_towers_names = {1: "tourlectrique"}
