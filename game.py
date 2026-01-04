@@ -316,7 +316,7 @@ def main(debug_show=False):
     def afficher_monstre():
         texture = pygame.image.load("Assets/zombie.png").convert_alpha()
         texture = pygame.transform.scale(texture, (50,50))
-
+        # Debut de la partie modifié par IA
         for m in monstres:
             i = m["i"]
             if i < len(chemins):
@@ -325,6 +325,7 @@ def main(debug_show=False):
                 texte = f"{monstres_pv}"
                 surface = font.render(texte, True, (255, 0, 255))
                 screen.blit(surface, (10, 10))
+                # Fin de la partie modifié par IA
                 currentid = monstres.index(m)
                 pv_monstre = monstres_pv[currentid]
 
