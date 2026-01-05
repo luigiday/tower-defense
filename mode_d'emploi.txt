@@ -5,7 +5,7 @@ ATTENTION : Ce jeu ne MARCHE PAS sur Windows, en raison de problème de compatib
 (voir mail envoyé dimanche)
 
 Comment executer ce projet :
-Installer les modules necessaires : 
+
 MacOS :
     - Installer Visual Studio Code
     - Ouvrir un terminal
@@ -13,6 +13,7 @@ MacOS :
     - Décompresser le projet dans un dossier, et l'ouvrir dans Visual Studio Code
     - Lancer le fichier main.py (l'installation et la configuration de l'extension Python pour VS Code doit être efféctuée avant)
     problèmes connus sur Mac : le jeu peux ne pas se lancer la 1ere fois, reesayer une 2eme fois dans ce cas la
+
 Linux (Basé sur Ubuntu) :
     - Installer Visual Studio Code
     - Ouvrir un terminal
@@ -20,3 +21,10 @@ Linux (Basé sur Ubuntu) :
         - Si pip n'est pas installé : sudo apt install python3-pip (sur les distro basées sur debian, voir sur Internet si vous utilisez une autre base tel que Arch ou Fedora)
     - Décompresser le projet dans un dossier, et l'ouvrir dans Visual Studio Code
     - Lancer le fichier main.py (l'installation et la configuration de l'extension Python pour VS Code doit être efféctuée avant)
+
+Windows (usage d'une machine virtuelle Linux) : 
+    - Installez le logiciel VirtualBox : https://www.virtualbox.org/
+    - Télechargez l'ISO pour Kubuntu 25.10 : https://cdimage.ubuntu.com/kubuntu/releases/25.10/release/kubuntu-25.10-desktop-amd64.iso
+    - Suivre ce guide pour créer votre VM et installer le système : https://fr.linux-terminal.com/?p=7673 (le processus d'installation est un peu different, mais rien de très complexe)
+    - Importez le ZIP du prjet sur votre VM Kubuntu
+    - Suivez les instruction pour Linux
