@@ -179,7 +179,7 @@ def main(debug_show=False):
       elif tick <= 1100:
         vague = 4
       else:
-        vague = min((tick // 200) + 5, 5)
+        vague = (tick // 200)
       font = pygame.font.SysFont(None, 100)
       texte = f"VAGUE:{vague}"
       surface = font.render(texte, True, (0, 0, 200))
@@ -316,25 +316,25 @@ def main(debug_show=False):
 
             
             if (pv_monstre/pv_max_monstre)*10 >= 10:
-                screen.blit(texture10, (((x)*16-3), ((y-1)*16-6)))  
+                screen.blit(texture10, (((x)*16-3), ((y-2)*16-6)))  
             elif (pv_monstre/pv_max_monstre)*10 >= 9:
-                screen.blit(texture9, (((x)*16-3), ((y-1)*16-6))) 
+                screen.blit(texture9, (((x)*16-3), ((y-2)*16-6))) 
             elif (pv_monstre/pv_max_monstre)*10 >= 8:
-                screen.blit(texture8, (((x)*16-3), ((y-1)*16-6))) 
+                screen.blit(texture8, (((x)*16-3), ((y-2)*16-6))) 
             elif (pv_monstre/pv_max_monstre)*10 >= 7:
-                screen.blit(texture7,(((x)*16-3), ((y-1)*16-6))) 
+                screen.blit(texture7,(((x)*16-3), ((y-2)*16-6))) 
             elif (pv_monstre/pv_max_monstre)*10 >= 6:
-                screen.blit(texture6, (((x)*16-3), ((y-1)*16-6))) 
+                screen.blit(texture6, (((x)*16-3), ((y-2)*16-6))) 
             elif (pv_monstre/pv_max_monstre)*10 >= 5:
-                screen.blit(texture5, (((x)*16-3), ((y-1)*16-6))) 
+                screen.blit(texture5, (((x)*16-3), ((y-2)*16-6))) 
             elif (pv_monstre/pv_max_monstre)*10 >= 4:
-                screen.blit(texture4, (((x)*16-3), ((y-1)*16-6))) 
+                screen.blit(texture4, (((x)*16-3), ((y-2)*16-6))) 
             elif (pv_monstre/pv_max_monstre)*10 >= 3:
-                screen.blit(texture3, (((x)*16-3), ((y-1)*16-6))) 
+                screen.blit(texture3, (((x)*16-3), ((y-2)*16-6))) 
             elif (pv_monstre/pv_max_monstre)*10 >= 2:
-                screen.blit(texture2, (((x)*16-3), ((y-1)*16-6))) 
+                screen.blit(texture2, (((x)*16-3), ((y-2)*16-6))) 
             elif (pv_monstre/pv_max_monstre)*10 >= 1 or (pv_monstre/pv_max_monstre)*10 <= 1:
-                screen.blit(texture1, (((x)*16-3), ((y-1)*16-6))) 
+                screen.blit(texture1, (((x)*16-3), ((y-2)*16-6))) 
 
 
    
