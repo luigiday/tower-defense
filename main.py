@@ -17,6 +17,18 @@ except ImportError:
    - PyQT 6
 Pour tout installer d'un coup, executer dans un terminal (bash/CMD) (pour linux, vous aurez besoin d'installer un environement virtuel) : 
    > pip install pygame PyQt6''')
+    rep = input("Voulez-vous tenter de les installer automatiquement ? (O/N) : ")
+    if rep == "o" or rep == "O":
+        import os
+        try:
+            os.system("pip install PyQt6 pygame")
+        except Exception as e:
+            print(f"Erreur : {e}")
+        finally:
+            print("Veuillez relancer pour appliquer")
+    else:
+        print("Abandon")
+        exit()
     
 features = {"one": 1, "two": 2}
 debug_show = False
