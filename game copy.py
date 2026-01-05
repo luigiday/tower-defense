@@ -463,6 +463,6 @@ def main(debug_show=False):
     
 
     pygame.quit()
-#main()
+main()
     
 # Ne mettez cette ligne que pr vos tests, pensez a comment out avant de commit

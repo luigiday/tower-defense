@@ -74,7 +74,7 @@ class SnakeLauncher(QtWidgets.QMainWindow): #la classe a été en pertie (50% a 
         try:
             game.main(debug_show)
         except Exception as e:
-            if not str(e) == "video system not initialized":
+            if not str(e).startswith("pygame"): #ignorer les erreurs pygame car elles arrivent en gereral a la fermeture du jeu a cause de la maniere dont pygame gere sa boucle principale
                 self.show_error_popup(e)
         self.show()
 

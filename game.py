@@ -26,9 +26,9 @@ def main(debug_show=False):
     argent = 250 #a modifier
     tower_dict = { "tourlectrique": 250, "sapintueur": 500, "cristalexplosif": 1000} # Ne pas modifier les noms, ca casse la selection de tours (les noms sont les mêmes que ceux dans le dossier assets)
                                                                                     # C'est aussi dans le meme ordre que les boutons de ladite popup
-    placed_towers_names = {1: "tourlectrique"}
-    placed_towers_coords = [[15,15]]
-    placed_towers_range = [[15-3,15+3,15-3,15+3]]  #x_min,x_max,y_min,y_max
+    placed_towers_names = {}
+    placed_towers_coords = []
+    placed_towers_range = []  #x_min,x_max,y_min,y_max
 
     clock = pygame.time.Clock()
     pygame.mixer.music.load("Assets/musique.mp3")
@@ -179,7 +179,7 @@ def main(debug_show=False):
       elif tick <= 1100:
         vague = 4
       else:
-        vague = 4 
+        vague = min((tick // 200) + 5, 5)
       font = pygame.font.SysFont(None, 100)
       texte = f"VAGUE:{vague}"
       surface = font.render(texte, True, (0, 0, 200))
@@ -214,7 +214,7 @@ def main(debug_show=False):
                 monstres_pv.append(pv_monstre_init)
                 monstres_pv_max.append(pv_monstre_init)
 
-        elif vague==4:
+        elif vague>=4:
             if tick % 10 == 0:
                 
                 monstres.append({"i": 0 })
@@ -487,7 +487,7 @@ def main(debug_show=False):
                             prix = tower_dict[tour_selectionnee]
                             if argent >= prix:
                                 placed_towers_coords.append([x, y])
-                                placed_towers_range.append([x-3, x+3, y-3, y+3])  # Ajouter la portée de la tour placée
+                                placed_towers_range.append([x-3, x+3, y-3, y+6])  # Ajouter la portée de la tour placée
                                 try:
                                     new_id = max(placed_towers_names.keys()) + 1
                                 except ValueError:
