@@ -1,0 +1,22 @@
+Compatibilitée :
+- MacOS (testé)
+- Linux (testé sur Kubuntu 25.10 avec le bureau KDE (celui par défaut), les instrucrtion sont pout tout os basé sur Debian/Ubuntu)
+ATTENTION : Ce jeu ne MARCHE PAS sur Windows, en raison de problème de compatibilitée avec PyQt6 (testé sur Windows 11 sur plusieurs PC, aucun ne marche)
+(voir mail envoyé dimanche)
+
+Comment executer ce projet :
+Installer les modules necessaires : 
+MacOS :
+    - Installer Visual Studio Code
+    - Ouvrir un terminal
+    - Executer : pip install PyQt6 pygame
+    - Décompresser le projet dans un dossier, et l'ouvrir dans Visual Studio Code
+    - Lancer le fichier main.py (l'installation et la configuration de l'extension Python pour VS Code doit être efféctuée avant)
+    problèmes connus sur Mac : le jeu peux ne pas se lancer la 1ere fois, reesayer une 2eme fois dans ce cas la
+Linux (Basé sur Ubuntu) :
+    - Installer Visual Studio Code
+    - Ouvrir un terminal
+    - Executer : pip install PyQt6 pygame --break-system-packages
+        - Si pip n'est pas installé : sudo apt install python3-pip (sur les distro basées sur debian, voir sur Internet si vous utilisez une autre base tel que Arch ou Fedora)
+    - Décompresser le projet dans un dossier, et l'ouvrir dans Visual Studio Code
+    - Lancer le fichier main.py (l'installation et la configuration de l'extension Python pour VS Code doit être efféctuée avant)
