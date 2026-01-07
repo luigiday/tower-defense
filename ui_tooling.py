@@ -113,7 +113,7 @@ def show_error_popup(e):
         raise SystemExit
 
 
-def ask_for_exit():
+def ask_for_exit_legacy():
     _get_app()
 
     msg = QMessageBox()
@@ -132,3 +132,41 @@ def ask_for_exit():
         raise SystemExit
         return True
     return False
+
+def ask_for_exit(towerdict, depenses, ennemis_tues, duree, vagues):
+    _get_app()
+
+    dialog = QtWidgets.QDialog()
+    uic.loadUi("pause.ui", dialog)
+
+    dialog.setWindowTitle("Jeu en pause - Tower Defense")
+
+    # defeir les valeurs dans la popup
+    tours_label = dialog.findChild(QtWidgets.QLabel, "tours")
+    vagues_label = dialog.findChild(QtWidgets.QLabel, "vagues")
+    depenses_label = dialog.findChild(QtWidgets.QLabel, "depenses")
+    ennemis_tues_label = dialog.findChild(QtWidgets.QLabel, "ennemis_tues")
+    duree_label = dialog.findChild(QtWidgets.QLabel, "duree")
+    def convertir_duree_en_MMSS(duree):
+        m = int(duree // 60)
+        s = int(duree % 60)
+        return f"{m:02}:{s:02}" # le :02 affiche toujours 2 chiffres pour que le temps soit propre
+    tours_label.setText(f"{len(towerdict):02}")
+    duree_label.setText(f"{convertir_duree_en_MMSS(duree)}")
+    vagues_label.setText(f"{vagues:02}")
+    depenses_label.setText(f"{depenses:04} C")
+    ennemis_tues_label.setText(f"{ennemis_tues:03}")
+
+    continuer_btn = dialog.findChild(QtWidgets.QPushButton, "continuer_btn")
+    continuer_btn.clicked.connect(dialog.reject)
+    quitter_btn = dialog.findChild(QtWidgets.QPushButton, "giveup_btn")
+    quitter_btn.clicked.connect(dialog.accept)
+    
+    result = dialog.exec()
+    if result == QtWidgets.QDialog.DialogCode.Accepted:
+        if QMessageBox.question(None, "Confirmer l'abandon", "Es-tu sûr de vouloir abandonner la partie en cours ? Ton score ne sera pas sauvegardé.", QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No) == QMessageBox.StandardButton.Yes:
+            return True
+        else:
+            return False
+    else:
+        return False

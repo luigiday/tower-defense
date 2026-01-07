@@ -195,14 +195,14 @@ def main(debug_show=False):
             if tick % 40 == 0:
                              
                 monstres.append({"i": 0 })
-                pv_monstre_init = randint(5,vague*10)
+                pv_monstre_init = randint(vague*5,vague*10)
                 monstres_pv.append(pv_monstre_init)
                 monstres_pv_max.append(pv_monstre_init) 
         elif vague==2:
             if tick % 30 == 0:
                 
                 monstres.append({"i": 0 })
-                pv_monstre_init = randint(5,vague*10)
+                pv_monstre_init = randint(vague*5,vague*10)
                 monstres_pv.append(pv_monstre_init)
                 monstres_pv_max.append(pv_monstre_init)
 
@@ -210,7 +210,7 @@ def main(debug_show=False):
             if tick % 20 == 0:
                 
                 monstres.append({"i": 0 })
-                pv_monstre_init = randint(5,vague*10)
+                pv_monstre_init = randint(vague*5,vague*10)
                 monstres_pv.append(pv_monstre_init)
                 monstres_pv_max.append(pv_monstre_init)
 
@@ -218,7 +218,7 @@ def main(debug_show=False):
             if tick % 10 == 0:
                 
                 monstres.append({"i": 0 })
-                pv_monstre_init = randint(5,vague*10)
+                pv_monstre_init = randint(vague*5,vague*10)
                 monstres_pv.append(pv_monstre_init)
                 monstres_pv_max.append(pv_monstre_init)
 
@@ -508,7 +508,7 @@ def main(debug_show=False):
                         pygame.event.clear()
 
                 if event.type == pygame.QUIT:
-                    if ui_tooling.ask_for_exit():
+                    if ui_tooling.ask_for_exit(placed_towers_names, depenses, ennemis_tues, time() - debut, vague):
                         running = False
  
                 
