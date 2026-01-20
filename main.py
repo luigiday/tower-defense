@@ -8,6 +8,12 @@ try:
     import sys
     from PyQt6 import QtWidgets, uic
     from PyQt6.QtGui import QKeySequence, QShortcut
+    from PyQt6.QtGui import QDesktopServices
+    from PyQt6.QtCore import pyqtSignal, QUrl
+    import threading
+    import urllib.request as urlreq
+    import json
+    import re
     
 
 except ImportError:
@@ -33,7 +39,60 @@ Pour tout installer d'un coup, executer dans un terminal (bash/CMD) (pour linux,
 features = {"one": 1, "two": 2}
 debug_show = False
 
+# Current local version of the launcher/game. Update this when releasing a new version.
+# Use the same tag format as your GitHub releases (for example: "v1.2.3" or "1.2.3").
+__version__ = "v0.1.0"
+
+
+def _normalize_version(tag: str) -> str:
+    """Strip leading 'v' or other non-numeric prefix and return a plain numeric version string."""
+    if not tag:
+        return "0"
+    # remove leading non-digit characters (like 'v')
+    tag = re.sub(r"^[^0-9]+", "", str(tag))
+    return tag
+
+
+def _parse_version_parts(version: str):
+    """Return a tuple of ints for numeric comparison. Non-numeric parts will be treated as 0."""
+    parts = version.split(".")
+    nums = []
+    for p in parts:
+        m = re.match(r"^(\d+)", p)
+        nums.append(int(m.group(1)) if m else 0)
+    # pad to 3 parts for simple semver-like compare
+    while len(nums) < 3:
+        nums.append(0)
+    return tuple(nums[:3])
+
+
+def is_version_newer(latest_tag: str, current_tag: str) -> bool:
+    """Return True if latest_tag represents a newer semantic version than current_tag."""
+    latest = _normalize_version(latest_tag)
+    current = _normalize_version(current_tag)
+    return _parse_version_parts(latest) > _parse_version_parts(current)
+
+
+def fetch_latest_release(owner: str, repo: str, timeout: float = 5.0):
+    """Query GitHub API for the latest release. Returns dict or None on error.
+
+    Uses the public API endpoint: https://api.github.com/repos/{owner}/{repo}/releases/latest
+    No external dependencies required.
+    """
+    api = f"https://api.github.com/repos/{owner}/{repo}/releases/latest"
+    try:
+        with urlreq.urlopen(api, timeout=timeout) as resp:
+            if resp.status != 200:
+                return None
+            data = resp.read().decode("utf-8")
+            return json.loads(data)
+    except Exception:
+        return None
+
 class SnakeLauncher(QtWidgets.QMainWindow): #la classe a été en pertie (50% a peu pres, ) generée a l'aide d'outils d'intelligence atificielle, nous comprenons néemoins le code
+    # signal emitted when an update is available: (latest_tag, release_url, release_notes)
+    update_available = pyqtSignal(str, str, str)
+
     def __init__(self):
         super().__init__()
 
@@ -43,6 +102,15 @@ class SnakeLauncher(QtWidgets.QMainWindow): #la classe a été en pertie (50% a 
         self.exitbtn.clicked.connect(sys.exit)
         QShortcut(QKeySequence("Ctrl+D"), self).activated.connect(self.enable_debug_mode) #Ctrl+D pour activer le mode debug
         QShortcut(QKeySequence("Ctrl+E"), self).activated.connect(self.launch_no_error_handle)
+
+        # connect update signal -> UI slot and start background check
+        try:
+            self.update_available.connect(self.show_update_dialog)
+            # start the background thread that queries GitHub for latest release
+            threading.Thread(target=self._check_updates_worker, daemon=True).start()
+        except Exception:
+            # if signals or threading are not available for any reason, ignore silently
+            pass
 
     def enable_debug_mode(self):
         global debug_show
@@ -89,6 +157,48 @@ class SnakeLauncher(QtWidgets.QMainWindow): #la classe a été en pertie (50% a 
             if not str(e).startswith("pygame"): #ignorer les erreurs pygame car elles arrivent en gereral a la fermeture du jeu a cause de la maniere dont pygame gere sa boucle principale
                 self.show_error_popup(e)
         self.show()
+
+
+    def _check_updates_worker(self):
+        """Background worker: queries GitHub API and emits update_available if there's a newer release.
+
+        Change `owner` and `repo` below if your repository is different.
+        """
+        owner = "luigiday"
+        repo = "tower-defense"
+        info = fetch_latest_release(owner, repo)
+        if not info:
+            return
+        latest_tag = info.get("tag_name") or info.get("name")
+        html_url = info.get("html_url") or f"https://github.com/{owner}/{repo}/releases"
+        release_notes = info.get("body", "") or ""
+        if latest_tag and is_version_newer(latest_tag, __version__):
+            try:
+                # emit signal to show dialog on main thread (include release notes)
+                self.update_available.emit(latest_tag, html_url, release_notes)
+            except Exception:
+                return
+
+
+    def show_update_dialog(self, latest_tag: str, release_url: str, release_notes: str):
+        """Run on the main thread (slot): show a QMessageBox offering to open the release page.
+
+        The release notes are shown in the expandable 'details' area via setDetailedText().
+        """
+        msg = QMessageBox(self)
+        msg.setIcon(QMessageBox.Icon.Information)
+        msg.setWindowTitle("Mise à jour disponible")
+        msg.setText(f"Nouvelle version disponible : {latest_tag}\nVous utilisez : {__version__}")
+        msg.setInformativeText("Voulez-vous ouvrir la page des releases pour télécharger la nouvelle version ?")
+        # put release notes into the detailed text (expandable) area
+        if release_notes:
+            msg.setDetailedText(release_notes)
+        open_btn = msg.addButton("Télecharger", QMessageBox.ButtonRole.AcceptRole)
+        ignore_btn = msg.addButton("Plus tard", QMessageBox.ButtonRole.RejectRole)
+        msg.exec()
+        if msg.clickedButton() == open_btn:
+            # open release page in user's default browser
+            QDesktopServices.openUrl(QUrl(release_url))
 
 if __name__ == "__main__":
     debug_allow = False
