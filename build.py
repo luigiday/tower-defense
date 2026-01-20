@@ -415,7 +415,7 @@ class PyInstallerGUI(QMainWindow):
         self.setWindowTitle("Construction - Utilitaire de build PyInstaller")
 
         # Base command
-        command = f"python3 -m pyinstaller --distpath \"{self.output_folder}\" "
+        command = f"pyinstaller --distpath \"{self.output_folder}\" "
 
         if self.onefile_checkbox.isChecked():
             command += "--onefile "

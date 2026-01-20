@@ -41,7 +41,7 @@ debug_show = False
 
 # Current local version of the launcher/game. Update this when releasing a new version.
 # Use the same tag format as your GitHub releases (for example: "v1.2.3" or "1.2.3").
-__version__ = "v0.1.0"
+__version__ = "v1.0.0"
 
 
 def _normalize_version(tag: str) -> str:
@@ -192,7 +192,7 @@ class SnakeLauncher(QtWidgets.QMainWindow): #la classe a été en pertie (50% a 
         msg.setInformativeText("Voulez-vous ouvrir la page des releases pour télécharger la nouvelle version ?")
         # put release notes into the detailed text (expandable) area
         if release_notes:
-            msg.setDetailedText(release_notes)
+            msg.setDetailedText(f"Nouveautées de la version {latest_tag} :\n{release_notes}")
         open_btn = msg.addButton("Télecharger", QMessageBox.ButtonRole.AcceptRole)
         ignore_btn = msg.addButton("Plus tard", QMessageBox.ButtonRole.RejectRole)
         msg.exec()
