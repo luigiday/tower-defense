@@ -41,7 +41,7 @@ debug_show = False
 
 # Current local version of the launcher/game. Update this when releasing a new version.
 # Use the same tag format as your GitHub releases (for example: "v1.2.3" or "1.2.3").
-__version__ = "v1.0.0"
+__version__ = "v1.0.1"
 
 
 def _normalize_version(tag: str) -> str:
